@@ -1,33 +1,23 @@
 ---
-title: "Apps Overview"
-description: "Explore the ChefOS app model and the apps available in the web operating system."
+title: "Integration use cases"
+description: "Map common partner workflows to ChefOS API domains."
 ---
 
-ChefOS apps are React packages loaded as windows into the OS shell. Each app is a self-contained package in `packages/app-*` with its own manifest, routes, and API client.
+Use ChefOS APIs to connect external systems without duplicating restaurant data by hand.
 
-## Available Apps
+| Use case | API domains to start with |
+|---|---|
+| Pull performance metrics into a BI tool | Sales, Scheduling, Inventory |
+| Import POS sales each day | Sales |
+| Sync employee schedules to another system | Scheduling, Employee self-service |
+| Connect inventory or vendor workflows | Inventory |
+| Build an employee mobile experience | Employee self-service, Messaging, Scheduling |
+| Trigger operational summaries | Sous AI, Sales, Scheduling, Inventory |
 
-| App ID | Package | Permission | Description |
-|---|---|---|---|
-| `inventory` | `app-inventory` | `inventory.items.read` | Items, waste, reports |
-| `recipes` | `app-inventory` | `inventory.recipes.read` | Recipe book, menu engineering |
-| `counting` | `app-inventory` | `inventory.counts.read` | Count sessions, variance |
-| `ordering` | `app-inventory` | `inventory.purchase_orders.read` | Create orders, receiving, vendors |
-| `line-checks` | `app-inventory` | `inventory.line_checks.read` | Active checks, templates, history |
-| `scheduling` | `app-scheduling` | `scheduling.shifts.read` | Schedule builder, shift calendar |
-| `employees` | `app-scheduling` | `scheduling.employees.read` | Employee roster, profiles |
-| `sales` | `app-sales` | `sales.analytics.read` | POS analytics, transactions |
-| `messaging` | `app-messaging` | `chat.messaging.read` | Stream-powered team chat |
+## Good integration behavior
 
-## Opening Apps
-
-Apps are opened via the sidebar, `Cmd/Ctrl+K` spotlight, or programmatically:
-
-```typescript
-const { openWindow } = useWindowActions();
-openWindow("inventory", { route: "/counts/sessions" });
-```
-
-## Sub-App Manifests
-
-Inventory uses sub-app manifests (`subAppManifests.ts`) so individual sections (recipes, counting, ordering, line-checks) can be referenced as separate app IDs in the window manager.
+- Sync by ChefOS IDs, not display names.
+- Keep a record of the last successful sync time.
+- Make writes idempotent when possible.
+- Show clear operator-facing errors when a token lacks access.
+- Avoid broad tokens for narrow workflows.

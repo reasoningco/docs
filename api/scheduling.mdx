@@ -1,88 +1,19 @@
 ---
-title: "API - Scheduling"
-description: "Use ChefOS scheduling API routes for shifts, employees, time off, and trades."
+title: "Scheduling API"
+description: "Use scheduling endpoints for employees, shifts, time off, availability, and labor workflows."
 ---
 
-Base prefix: `/chefos/api/v1/scheduling`
+Scheduling endpoints support employee roster sync, schedule publishing, time-off workflows, and labor reporting.
 
-## `GET /bootstrap`
+| Endpoint area | Use it for |
+|---|---|
+| `/chefos/api/v1/scheduling/employees` | Read or manage employee roster records |
+| `/chefos/api/v1/scheduling/positions` | Read or manage schedulable positions |
+| `/chefos/api/v1/scheduling/shifts` | Read, create, or update shifts |
+| `/chefos/api/v1/scheduling/time-off` | Read or manage time-off requests |
+| `/chefos/api/v1/scheduling/availability` | Read or manage employee availability |
+| `/chefos/api/v1/scheduling/reports` | Read labor summaries and schedule metrics |
 
-Full schedule data + reference data for a date range. The primary endpoint for the schedule view.
+## Required context
 
-**Query params:**
-
-| Param | Type | Description |
-|---|---|---|
-| `startDate` | `YYYY-MM-DD` | Start of week (required) |
-| `endDate` | `YYYY-MM-DD` | End of week (required) |
-| `includeReferenceData` | boolean | Include employees and positions (default: true) |
-| `includeTimeOffRequests` | boolean | Include time-off requests (default: true) |
-
-**Permission:** `scheduling.shifts.read`
-
-## `GET /labor-cost`
-
-Labor cost summary for a date range. Used by the Sales dashboard for Prime Cost calculation.
-
-**Query params:**
-
-| Param | Type | Description |
-|---|---|---|
-| `startDate` | `YYYY-MM-DD` | Start date (required) |
-| `endDate` | `YYYY-MM-DD` | End date (required) |
-| `locationId` | string | Filter to location |
-
-**Permission:** `scheduling.read` (locationScoped)
-
-**Response:**
-
-```json
-{
-  "totalLaborCost": 12840.00,
-  "totalHours": 428.5,
-  "overtimeHours": 12.0,
-  "regularHours": 416.5,
-  "laborCostPct": null,
-  "employeeCount": 18,
-  "byPosition": [
-    {
-      "positionId": "pos_001",
-      "positionName": "Line Cook",
-      "hours": 142.0,
-      "cost": 4260.00
-    }
-  ]
-}
-```
-
-## `GET /me`
-
-Current authenticated employee's profile.
-
-**Permission:** `scheduling.profile.read` (implicit for any scheduling read grant)
-
-## `GET /shifts`
-
-Shifts for a date range.
-
-**Query params:** `startDate`, `endDate`, `locationId`, `employeeId`
-
-**Permission:** `scheduling.shifts.read`
-
-## `POST /shifts`
-
-Create a new shift.
-
-**Permission:** `scheduling.shifts.write`
-
-## `GET /time-off`
-
-Time-off requests for the current user or all employees (managers).
-
-**Permission:** `scheduling.shifts.read`
-
-## `GET /trades`
-
-Open shift trade posts.
-
-**Permission:** `scheduling.shifts.read`
+Scheduling data is usually location-scoped. Use employee IDs and shift IDs returned by ChefOS when syncing changes.

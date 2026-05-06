@@ -1,89 +1,35 @@
 ---
-title: "RBAC & Permissions"
-description: "Understand role-based access control and permission scoping in ChefOS."
+title: "Permissions and scopes"
+description: "Understand how ChefOS limits API access by domain, action, and location."
 ---
 
-ChefOS uses a **deny-by-default** role-based access control system enforced on every authenticated API request.
+ChefOS permissions are intentionally narrow. A token can be limited to read-only access, specific domains, specific actions, or specific locations.
 
-## Roles
+## Permission shape
 
-| Role | Description |
+Permissions generally follow this shape:
+
+`domain.resource.action`
+
+| Example | Allows |
 |---|---|
-| `admin` | Full access to everything &mdash; no permission checks |
-| `manager` | Access determined by `section_grants` table |
-| `employee` | Access determined by `section_grants` table |
+| `sales.reports.read` | Read sales reports and summaries |
+| `scheduling.shifts.write` | Create or update shifts |
+| `inventory.items.read` | Read inventory item records |
+| `messaging.channels.write` | Create or update messaging channels |
 
-## Permission Format
+## Location scoping
 
-Permissions follow the pattern `module.section.action`:
+Many endpoints require a location. If a token can access five locations but the request is for one location, ChefOS evaluates the request against that one location.
 
-```
-inventory.items.read
-scheduling.shifts.write
-sales.analytics.read
-chat.messaging.read
-```
+## Recommended scopes
 
-Wildcard matching is supported:
-- `inventory.*.read` &mdash; grants all read access within inventory
-
-## Database Tables
-
-| Table | Purpose |
+| Integration type | Recommended access |
 |---|---|
-| `org_membership` | User -> tenant mapping, role level, active status |
-| `section_grants` | `(user_id, tenant_id, module, section, access, location_scope)` |
-| `user_location_grants` | Location restrictions per user |
+| BI dashboard | Read-only sales, labor, and inventory reports |
+| POS connector | Sales import write access for approved locations |
+| Scheduling partner | Employee and shift read/write access as needed |
+| Inventory partner | Item, count, recipe, order, and waste scopes |
+| Mobile employee app | Self-service scopes for the current employee |
 
-## Deny-by-Default
-
-Every authenticated route **must** declare an `authz` config block. Routes without it return `403`:
-
-```typescript
-// This route requires inventory.items.read permission
-app.get("/items", {
-  config: {
-    authz: { permission: "inventory.items.read", locationScoped: true }
-  }
-}, handler);
-
-// Public route &mdash; explicitly opted out
-app.get("/health", {
-  config: { authz: { public: true } }
-}, handler);
-```
-
-## Permission Checks
-
-The frontend mirrors backend permission logic in `usePermissions()`:
-
-```typescript
-const { hasPermission, hasExplicitGrant, canOpenApp, isAdmin } = usePermissionsContext();
-
-// Check if user can access a module
-if (canOpenApp("inventory")) { /* show inventory sidebar item */ }
-
-// Check specific permission
-if (hasPermission("scheduling.shifts.write")) { /* show edit button */ }
-```
-
-### `hasPermission` vs `hasExplicitGrant`
-
-| Method | Use For |
-|---|---|
-| `hasPermission` | API-level guards &mdash; includes implicit reference-data grants |
-| `hasExplicitGrant` | UI visibility &mdash; only explicit `section_grants` rows |
-
-## Deactivated Users
-
-`is_active` is checked on every request in `resolveAuthContext()`. Deactivated users are immediately blocked with no cached permissions.
-
-## Location Scoping
-
-For location-scoped routes, the `X-Location-Id` header is validated against `user_location_grants`. Non-admin users cannot access locations they haven't been granted.
-
-```
-X-Location-Id: loc_abc123
-```
-
-Location scope is either `assigned_only` (default) or `all_locations` per permission grant.
+Start read-only whenever possible, then add write scopes after the integration behavior is confirmed.

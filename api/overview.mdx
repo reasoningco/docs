@@ -1,72 +1,38 @@
 ---
-title: "API Overview"
-description: "Review ChefOS API base URLs, authentication, location context, and route prefixes."
+title: "API overview"
+description: "Review base URLs, headers, response patterns, and API domains."
 ---
 
-All ChefOS API endpoints are served by the Fastify server at `apps/api`.
+ChefOS APIs are organized by operational domain. Every request is authenticated and evaluated against the token permissions and location scope.
 
 ## Base URL
 
-```
-http://localhost:4000            # Development
-https://your-domain.com          # Production
-```
+Use the API base URL provided with your credentials. Sandbox and production use separate credentials.
 
-## Versioning
+## Required headers
 
-All routes are prefixed with `/chefos/api/v1/`.
-
-## Authentication
-
-All endpoints require a valid JWT in the `Authorization` header:
-
-```http
-Authorization: Bearer <supabase-access-token>
-```
-
-Unauthenticated routes (no auth required):
-- `GET /health`
-- `GET /chefos/api/v1/auth/resolve-username`
-- Webhook routes (use `connectionId` param instead)
-
-## Location Context
-
-For location-scoped data, pass the active location ID:
-
-```http
-X-Location-Id: loc_abc123
-```
-
-Use `X-Location-Id: all` or omit the header to query all accessible locations.
-
-## Response Format
-
-All endpoints return JSON. Errors follow:
-
-```json
-{
-  "error": "Human-readable error message",
-  "code": "OPTIONAL_ERROR_CODE"
-}
-```
-
-## Rate Limiting
-
-No rate limiting is applied in development. Production deployments should add rate limiting at the reverse proxy layer.
-
-## Route Prefixes
-
-| Prefix | Module |
+| Header | Value |
 |---|---|
-| `/chefos/api/v1/inventory` | Inventory, recipes, counts, ordering, line checks |
-| `/chefos/api/v1/scheduling` | Shifts, employees, time-off, trades |
-| `/chefos/api/v1/sales` | POS data, analytics, forecasting |
-| `/chefos/api/v1/chat` | Messaging (Stream Chat token) |
-| `/chefos/api/v1/me` | Current user profile and permissions |
-| `/chefos/api/v1/admin` | User management (admin/manager only) |
-| `/chefos/api/v1/profile` | User profile CRUD |
-| `/chefos/api/v1/notifications` | Notification preferences |
-| `/chefos/api/v1/reports` | Report scheduling and delivery |
-| `/chefos/api/v1/sous` | Sous AI intent parsing |
-| `/chefos/api/v1/integrations` | POS and third-party integrations |
-| `/chefos/api/v1/webhooks` | Inbound webhooks (unauthenticated) |
+| `Authorization` | `Bearer <token>` |
+| `X-Location-Id` | Location ID for location-scoped endpoints |
+| `Content-Type` | `application/json` for requests with a body |
+
+## Domains
+
+| Domain | Prefix |
+|---|---|
+| Auth and account context | `/chefos/api/v1/auth`, `/chefos/api/v1/me` |
+| Sales | `/chefos/api/v1/sales` |
+| Scheduling | `/chefos/api/v1/scheduling` |
+| Inventory | `/chefos/api/v1/inventory` |
+| Messaging | `/chefos/api/v1/chat` |
+| Employee self-service | `/chefos/api/v1/employee-self-service` |
+| Assistant | `/chefos/api/v1/sous` |
+
+## Error format
+
+| Field | Description |
+|---|---|
+| `error` | Human-readable message |
+| `code` | Stable machine-readable code when available |
+| `details` | Optional structured validation or conflict details |

@@ -1,21 +1,42 @@
 ---
-title: "ChefOS developer documentation"
-description: "Technical docs for ChefOS apps, APIs, permissions, and Sous AI."
+title: "Start here"
+description: "Use ChefOS APIs to build integrations for restaurant operations."
 ---
 
-ChefOS is a restaurant management operating system delivered as a desktop-like web application. Use these docs to understand the architecture, integrate with the API, and build or operate ChefOS apps.
+ChefOS gives partners a single API surface for restaurant operations: locations, employees, schedules, sales, inventory, messaging, and assistant workflows.
+
+Use these docs when you need to connect another system to ChefOS, automate an operational workflow, or build a service on top of ChefOS data.
 
 <Columns cols={2}>
-  <Card title="Start with the guide" icon="book-open" href="/guide/what-is-chefos">
-    Learn the core ChefOS concepts, architecture, auth model, and RBAC system.
+  <Card title="Understand the platform" icon="book-open" href="/guide/what-is-chefos">
+    Learn the main ChefOS objects and how data is scoped across restaurants and locations.
   </Card>
-  <Card title="Explore apps" icon="grid-2" href="/apps/overview">
-    Review the web OS app model and the inventory, scheduling, sales, messaging, and employee mobile surfaces.
+  <Card title="Authenticate requests" icon="key" href="/guide/auth">
+    Send bearer tokens, choose the right environment, and pass location context.
   </Card>
-  <Card title="Use the API" icon="terminal" href="/api/overview">
-    Understand route prefixes, authentication, location scoping, and module APIs.
+  <Card title="Browse API domains" icon="terminal" href="/api/overview">
+    Find the sales, scheduling, inventory, messaging, and employee self-service endpoints.
   </Card>
-  <Card title="Use Sous AI" icon="sparkles" href="/sous-ai">
-    See how ChefOS handles AI navigation, reporting, notification control, and permission scoping.
+  <Card title="Plan an integration" icon="plug" href="/apps/overview">
+    Match common integration use cases to the ChefOS APIs that support them.
   </Card>
 </Columns>
+
+## Quick start
+
+1. Request API credentials for the organization you are integrating with.
+2. Pick the target environment and base URL.
+3. Send `Authorization: Bearer <token>` on every API request.
+4. Include the active location header when reading or writing location-scoped data.
+5. Start with a read-only endpoint, then request write scopes when the workflow is ready.
+
+## Core domains
+
+| Domain | Build with it when you need to |
+|---|---|
+| Sales | Import POS data, read revenue metrics, compare performance, or power reporting |
+| Scheduling | Sync shifts, employees, availability, time-off, and labor forecasts |
+| Inventory | Manage items, counts, recipes, ordering, waste, and vendor workflows |
+| Messaging | Connect operational conversations and employee notifications |
+| Employee self-service | Build mobile or kiosk experiences for schedules, trades, and time off |
+| Sous AI | Trigger permission-aware assistant actions from approved workflows |

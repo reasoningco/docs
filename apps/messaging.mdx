@@ -1,37 +1,18 @@
 ---
-title: "Messaging App"
-description: "Use Stream-powered team messaging inside ChefOS."
+title: "Messaging integrations"
+description: "Connect team communication, channels, participants, and notification preferences."
 ---
 
-Real-time team chat powered by **Stream Chat**, integrated directly into the ChefOS window manager.
+Messaging integrations help operational systems notify the right people without leaving restaurant teams to monitor another tool.
 
-## Overview
+## Common workflows
 
-The Messaging app provides a full team communication layer without leaving ChefOS. It uses Stream's managed infrastructure for reliable, real-time message delivery.
-
-## Features
-
-- Real-time channels per location or team
-- Message history with full scroll
-- Notification badges on the taskbar icon
-- Unread count synced across tabs
-
-## Permission
-
-Requires `chat.messaging.read` section grant.
-
-## API Endpoints
-
-Base prefix: `/chefos/api/v1/chat`
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/token` | Get Stream Chat user token |
-| `GET` | `/channels` | List available channels |
-
-## Environment Variables
-
-| Variable | Description |
+| Workflow | What to sync |
 |---|---|
-| `STREAM_API_KEY` | Stream Chat API key (public) |
-| `STREAM_API_SECRET` | Stream Chat API secret (server-side only) |
+| Team channels | Location channels, department channels, and participants |
+| Operational alerts | Messages tied to schedule changes, inventory issues, or sales exceptions |
+| Notification preferences | User-level opt-ins, muted categories, and delivery settings |
+
+## Recommended approach
+
+Keep messages tied to a clear location, employee, or operational object so teams can act on them quickly.

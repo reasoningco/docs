@@ -1,76 +1,17 @@
 ---
-title: "API - Authentication"
-description: "Authenticate against the ChefOS API with Supabase JWTs and tenant context."
+title: "Auth API"
+description: "Resolve account context and inspect the current authenticated user."
 ---
 
-## Getting a Token
+Use auth endpoints to resolve login context and confirm what the current token can access.
 
-Obtain a Supabase access token by calling `signInWithPassword` from the frontend:
+| Endpoint | Purpose |
+|---|---|
+| `GET /chefos/api/v1/me` | Return the current user, organization memberships, locations, and permissions |
+| `GET /chefos/api/v1/auth/resolve-username` | Resolve a username to its login identity when enabled for the organization |
 
-```typescript
-const { data } = await supabase.auth.signInWithPassword({
-  email: "user@restaurant.com",
-  password: "password",
-});
-const token = data.session?.access_token;
-```
+## Integration notes
 
-## Using the Token
-
-Pass the token as a Bearer header on every API request:
-
-```http
-GET /chefos/api/v1/scheduling/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
-## Token Expiry & Refresh
-
-Supabase access tokens expire after **1 hour** by default.
-
-The ChefOS frontend handles refresh automatically:
-1. On page load, `getSession()` proactively refreshes expired tokens
-2. On mid-session 401, a `chefos:refresh-token` event triggers `supabase.auth.refreshSession()`
-3. The original request is retried once with the new token
-
-If you're calling the API from a script or external client, refresh via:
-
-```typescript
-const { data } = await supabase.auth.refreshSession();
-const newToken = data.session?.access_token;
-```
-
-## Dev Token (Local Only)
-
-In local development with `AUTH_ALLOW_DEV_TOKEN=true`:
-
-```http
-Authorization: Bearer dev
-```
-
-This resolves to `tenant_dev` / `user_dev` and bypasses JWT verification. **Never used in production.**
-
-## Endpoints
-
-### `GET /chefos/api/v1/me/permissions`
-
-Returns the current user's RBAC context.
-
-```json
-{
-  "userId": "uuid",
-  "roleLevel": "manager",
-  "isAdmin": false,
-  "permissions": ["scheduling.shifts.read", "scheduling.employees.read"],
-  "explicitGrants": ["scheduling.shifts.read"],
-  "allowedModules": ["scheduling"]
-}
-```
-
-### `GET /chefos/api/v1/auth/resolve-username`
-
-Public endpoint &mdash; resolves a username to an email for login.
-
-```http
-GET /chefos/api/v1/auth/resolve-username?username=johnd
-```
+- Call `/me` after authentication to confirm the token is valid.
+- Cache permission and location data for short periods only.
+- Re-check permissions after receiving `401` or `403` responses.

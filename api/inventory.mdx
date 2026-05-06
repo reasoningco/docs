@@ -1,92 +1,19 @@
 ---
-title: "API - Inventory"
-description: "Use ChefOS inventory API routes for items, counts, recipes, ordering, and waste."
+title: "Inventory API"
+description: "Use inventory endpoints for items, counts, recipes, ordering, waste, and vendors."
 ---
 
-Base prefix: `/chefos/api/v1/inventory`
+Inventory endpoints support operational workflows around purchasing, counting, recipe costing, and waste tracking.
 
-## `GET /food-cost`
+| Endpoint area | Use it for |
+|---|---|
+| `/chefos/api/v1/inventory/items` | Read or manage inventory items |
+| `/chefos/api/v1/inventory/vendors` | Read or manage vendors and vendor item mappings |
+| `/chefos/api/v1/inventory/counts` | Read or manage inventory counts |
+| `/chefos/api/v1/inventory/recipes` | Read recipes, ingredients, yields, and costs |
+| `/chefos/api/v1/inventory/orders` | Read or manage purchase orders |
+| `/chefos/api/v1/inventory/waste` | Read or create waste records |
 
-Blended food cost percentage for a date range. Used by the Sales dashboard for Prime Cost calculation.
+## Required context
 
-**Query params:**
-
-| Param | Type | Description |
-|---|---|---|
-| `startDate` | `YYYY-MM-DD` | Start date (required) |
-| `endDate` | `YYYY-MM-DD` | End date (required) |
-| `locationId` | string | Filter to location |
-
-**Permission:** `inventory.read` (locationScoped)
-
-**Response:**
-
-```json
-{
-  "foodCostPct": 28.4,
-  "totalFoodCost": 13710.00,
-  "activeRecipeCount": 94,
-  "topItems": [
-    { "itemName": "Ribeye Steak", "costPct": 42.1, "margin": 57.9 }
-  ]
-}
-```
-
-## `GET /items`
-
-Item master list with optional search and filtering.
-
-**Query params:** `search`, `isActive`, `category`, `page`, `limit`
-
-**Permission:** `inventory.items.read`
-
-## `GET /waste`
-
-Waste log entries for a date range.
-
-**Query params:** `startDate`, `endDate`, `locationId`
-
-**Permission:** `inventory.items.read`
-
-## `GET /counts`
-
-Count sessions list.
-
-**Permission:** `inventory.counts.read`
-
-## `GET /counts/variance`
-
-Count variance report comparing actual vs theoretical quantities.
-
-**Permission:** `inventory.counts.read`
-
-## `GET /purchase-orders`
-
-Purchase order list with status filtering.
-
-**Query params:** `status`, `vendorId`, `page`, `limit`
-
-**Permission:** `inventory.purchase_orders.read`
-
-## `GET /vendors`
-
-Vendor list.
-
-**Permission:** `inventory.purchase_orders.read`
-
-## `POST /reports/smart`
-
-Run a natural-language inventory report query.
-
-**Body:**
-
-```json
-{
-  "question": "Show me waste cost for the last 30 days",
-  "startDate": "2026-02-05",
-  "endDate": "2026-03-07",
-  "limit": 20
-}
-```
-
-**Permission:** `inventory.reports.read`
+Inventory data is location-scoped. Include the location header for operational reads and writes.
