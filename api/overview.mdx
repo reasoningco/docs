@@ -1,0 +1,72 @@
+---
+title: "API Overview"
+description: "Review ChefOS API base URLs, authentication, location context, and route prefixes."
+---
+
+All ChefOS API endpoints are served by the Fastify server at `apps/api`.
+
+## Base URL
+
+```
+http://localhost:4000            # Development
+https://your-domain.com          # Production
+```
+
+## Versioning
+
+All routes are prefixed with `/chefos/api/v1/`.
+
+## Authentication
+
+All endpoints require a valid JWT in the `Authorization` header:
+
+```http
+Authorization: Bearer <supabase-access-token>
+```
+
+Unauthenticated routes (no auth required):
+- `GET /health`
+- `GET /chefos/api/v1/auth/resolve-username`
+- Webhook routes (use `connectionId` param instead)
+
+## Location Context
+
+For location-scoped data, pass the active location ID:
+
+```http
+X-Location-Id: loc_abc123
+```
+
+Use `X-Location-Id: all` or omit the header to query all accessible locations.
+
+## Response Format
+
+All endpoints return JSON. Errors follow:
+
+```json
+{
+  "error": "Human-readable error message",
+  "code": "OPTIONAL_ERROR_CODE"
+}
+```
+
+## Rate Limiting
+
+No rate limiting is applied in development. Production deployments should add rate limiting at the reverse proxy layer.
+
+## Route Prefixes
+
+| Prefix | Module |
+|---|---|
+| `/chefos/api/v1/inventory` | Inventory, recipes, counts, ordering, line checks |
+| `/chefos/api/v1/scheduling` | Shifts, employees, time-off, trades |
+| `/chefos/api/v1/sales` | POS data, analytics, forecasting |
+| `/chefos/api/v1/chat` | Messaging (Stream Chat token) |
+| `/chefos/api/v1/me` | Current user profile and permissions |
+| `/chefos/api/v1/admin` | User management (admin/manager only) |
+| `/chefos/api/v1/profile` | User profile CRUD |
+| `/chefos/api/v1/notifications` | Notification preferences |
+| `/chefos/api/v1/reports` | Report scheduling and delivery |
+| `/chefos/api/v1/sous` | Sous AI intent parsing |
+| `/chefos/api/v1/integrations` | POS and third-party integrations |
+| `/chefos/api/v1/webhooks` | Inbound webhooks (unauthenticated) |

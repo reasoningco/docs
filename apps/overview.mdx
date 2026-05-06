@@ -1,0 +1,33 @@
+---
+title: "Apps Overview"
+description: "Explore the ChefOS app model and the apps available in the web operating system."
+---
+
+ChefOS apps are React packages loaded as windows into the OS shell. Each app is a self-contained package in `packages/app-*` with its own manifest, routes, and API client.
+
+## Available Apps
+
+| App ID | Package | Permission | Description |
+|---|---|---|---|
+| `inventory` | `app-inventory` | `inventory.items.read` | Items, waste, reports |
+| `recipes` | `app-inventory` | `inventory.recipes.read` | Recipe book, menu engineering |
+| `counting` | `app-inventory` | `inventory.counts.read` | Count sessions, variance |
+| `ordering` | `app-inventory` | `inventory.purchase_orders.read` | Create orders, receiving, vendors |
+| `line-checks` | `app-inventory` | `inventory.line_checks.read` | Active checks, templates, history |
+| `scheduling` | `app-scheduling` | `scheduling.shifts.read` | Schedule builder, shift calendar |
+| `employees` | `app-scheduling` | `scheduling.employees.read` | Employee roster, profiles |
+| `sales` | `app-sales` | `sales.analytics.read` | POS analytics, transactions |
+| `messaging` | `app-messaging` | `chat.messaging.read` | Stream-powered team chat |
+
+## Opening Apps
+
+Apps are opened via the sidebar, `Cmd/Ctrl+K` spotlight, or programmatically:
+
+```typescript
+const { openWindow } = useWindowActions();
+openWindow("inventory", { route: "/counts/sessions" });
+```
+
+## Sub-App Manifests
+
+Inventory uses sub-app manifests (`subAppManifests.ts`) so individual sections (recipes, counting, ordering, line-checks) can be referenced as separate app IDs in the window manager.

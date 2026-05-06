@@ -1,0 +1,52 @@
+---
+title: "Inventory App"
+description: "Use inventory, recipes, counts, ordering, line checks, and waste workflows."
+---
+
+The Inventory app is the most feature-rich app in ChefOS, covering items, recipes, counting, ordering, line checks, and reports.
+
+## Routes
+
+| Route | View | Permission |
+|---|---|---|
+| `/dashboard` | Inventory dashboard | `inventory.items.read` |
+| `/items` | Item master list | `inventory.items.read` |
+| `/waste` | Waste log | `inventory.items.read` |
+| `/reports` | Smart NL reports | `inventory.reports.read` |
+| `/recipes/book` | Recipe book | `inventory.recipes.read` |
+| `/recipes/menu-engineering` | Menu engineering | `inventory.recipes.read` |
+| `/counts/sessions` | Count sessions | `inventory.counts.read` |
+| `/counts/new` | Start a new count | `inventory.counts.read` |
+| `/counts/variance` | Count variance | `inventory.counts.read` |
+| `/ordering/create-order` | Create purchase order | `inventory.purchase_orders.read` |
+| `/ordering/orders-receiving` | Orders & receiving | `inventory.purchase_orders.read` |
+| `/ordering/vendors` | Vendor management | `inventory.purchase_orders.read` |
+| `/line-checks/active` | Active line checks | `inventory.line_checks.read` |
+| `/line-checks/templates` | Check templates | `inventory.line_checks.read` |
+| `/line-checks/history` | Check history | `inventory.line_checks.read` |
+| `/line-checks/analytics` | Temperature analytics | `inventory.line_checks.read` |
+
+## Smart Reports
+
+The Inventory Reports view supports natural-language queries powered by OpenRouter LLM. Examples:
+
+- "Show me waste cost for last 30 days"
+- "What items have the highest variance this month?"
+- "Vendor price comparison for category BEV"
+- "Top 10 items by theoretical food cost"
+
+## API Endpoints
+
+Base prefix: `/chefos/api/v1/inventory`
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/items` | List items (paginated, searchable) |
+| `POST` | `/items` | Create item |
+| `GET` | `/waste` | List waste entries |
+| `GET` | `/food-cost` | Food cost % for date range |
+| `GET` | `/counts` | List count sessions |
+| `GET` | `/purchase-orders` | List purchase orders |
+| `GET` | `/vendors` | List vendors |
+| `GET` | `/line-check-templates` | List check templates |
+| `POST` | `/reports/smart` | Run NL query report |

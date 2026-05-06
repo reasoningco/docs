@@ -1,0 +1,66 @@
+---
+title: "Scheduling App"
+description: "Use scheduling, employees, time off, shift trades, notifications, and employee mobile flows."
+---
+
+Manages shift scheduling, employee rosters, time-off requests, shift trades, and labor cost analytics.
+
+## Routes
+
+| Route | View | Permission |
+|---|---|---|
+| `/home` | Weekly schedule calendar | `scheduling.shifts.read` |
+| `/` (employees app) | Employee roster | `scheduling.employees.read` |
+| `/form` (points-tracker) | Penalty/write-up tracker | `scheduling.shifts.read` |
+
+## Key Features
+
+### Schedule Builder
+- Weekly calendar view with drag-and-drop shifts
+- Multi-location support with `X-Location-Id` header scoping
+- Published/draft states &mdash; publish notifies all affected employees
+
+### Labor Cost Tracking
+Labor cost data is available as a cross-domain API for the Sales dashboard:
+
+```
+GET /chefos/api/v1/scheduling/labor-cost?startDate=2026-03-01&endDate=2026-03-07&locationId=loc_abc
+```
+
+Response includes:
+- `totalLaborCost` &mdash; total wages for the period
+- `totalHours` &mdash; scheduled hours
+- `overtimeHours` &mdash; hours over 40h/week threshold
+- `laborCostPct` &mdash; labor cost as % of sales (when combined with sales data)
+- `byPosition` &mdash; breakdown per position
+
+### Overtime Calculation
+- OT threshold: **40 hours/week** (Sunday-Saturday UTC boundaries)
+- OT rate: **1.5x** base pay rate
+- Position-level pay rate overrides supported
+
+### Shift Trades
+Employees can post and accept shift trades. Managers approve or auto-approve based on settings.
+
+### Time-Off Requests
+Employees submit time-off requests. Managers see a queue and can approve/deny with notes.
+
+## API Endpoints
+
+Base prefix: `/chefos/api/v1/scheduling`
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/bootstrap` | Full schedule + reference data for a date range |
+| `GET` | `/me` | Current employee profile |
+| `GET` | `/labor-cost` | Labor cost summary for date range |
+| `GET` | `/employees` | Employee list |
+| `GET` | `/positions` | Position list |
+| `GET` | `/shifts` | Shifts for a date range |
+| `POST` | `/shifts` | Create shift |
+| `GET` | `/time-off` | Time-off requests |
+| `GET` | `/trades` | Shift trade posts |
+
+## Employee Mobile App
+
+Employees can access their schedule, request time off, trade shifts, and more from their phone. See the [Employee Mobile App](/apps/employee-mobile) guide for details.

@@ -1,0 +1,98 @@
+---
+title: "API - Sales"
+description: "Use ChefOS sales API routes for POS data, analytics, and forecasts."
+---
+
+Base prefix: `/chefos/api/v1/sales`
+
+All endpoints require `sales.analytics.read` permission.
+
+## `GET /summary`
+
+Sales summary for a date range.
+
+**Query params:**
+
+| Param | Type | Description |
+|---|---|---|
+| `startDate` | `YYYY-MM-DD` | Start of range (required) |
+| `endDate` | `YYYY-MM-DD` | End of range (required) |
+| `locationId` | string | Filter to specific location |
+
+**Response:**
+
+```json
+{
+  "totalSales": 48230.50,
+  "transactionCount": 412,
+  "avgTransaction": 117.07
+}
+```
+
+## `GET /transactions`
+
+Paginated transaction list.
+
+**Query params:** `startDate`, `endDate`, `locationId`, `page`, `limit`
+
+## `GET /items`
+
+Top items by revenue for a date range.
+
+**Query params:** `startDate`, `endDate`, `locationId`, `limit`
+
+## `POST /upload`
+
+Upload a POS CSV file for processing.
+
+**Body:** `multipart/form-data` with `file` and `posSystem` fields.
+
+**Supported POS systems:** `toast`, `square`, `clover`, `lightspeed`, `revel`
+
+## `GET /forecast`
+
+ML sales forecast for a location.
+
+**Query params:**
+
+| Param | Type | Description |
+|---|---|---|
+| `locationId` | string | Location ID (required) |
+| `horizon` | `7d` or `14d` | Forecast horizon (default: `7d`). `7`/`14` are also accepted for backwards compatibility. |
+| `start` | `YYYY-MM-DD` | Optional start date filter |
+| `end` | `YYYY-MM-DD` | Optional end date filter |
+
+**Response:**
+
+```json
+{
+  "status": "ok",
+  "forecasts": [
+    {
+      "forecastDate": "2026-03-08",
+      "predictedRevenue": 6840,
+      "predictedTxnCount": 312,
+      "predictedAvgCheck": 21.92,
+      "ci80Lower": 5950,
+      "ci80Upper": 7730,
+      "ci95Lower": 5600,
+      "ci95Upper": 8100,
+      "horizon": "7d"
+    }
+  ],
+  "model": {
+    "modelId": "uuid",
+    "modelType": "ensemble",
+    "coldStartTier": "full",
+    "trainedAt": "2026-03-01T04:00:00.000Z",
+    "dataPointCount": 120,
+    "mape": 8.24,
+    "rmse": 410.12,
+    "trainingDataStart": "2025-11-01",
+    "trainingDataEnd": "2026-02-28",
+    "isStale": false
+  }
+}
+```
+
+**Model tiers:** `insufficient` -> `naive` -> `prophet_only` -> `full` (Prophet + LightGBM ensemble)

@@ -1,0 +1,37 @@
+---
+title: "Messaging App"
+description: "Use Stream-powered team messaging inside ChefOS."
+---
+
+Real-time team chat powered by **Stream Chat**, integrated directly into the ChefOS window manager.
+
+## Overview
+
+The Messaging app provides a full team communication layer without leaving ChefOS. It uses Stream's managed infrastructure for reliable, real-time message delivery.
+
+## Features
+
+- Real-time channels per location or team
+- Message history with full scroll
+- Notification badges on the taskbar icon
+- Unread count synced across tabs
+
+## Permission
+
+Requires `chat.messaging.read` section grant.
+
+## API Endpoints
+
+Base prefix: `/chefos/api/v1/chat`
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/token` | Get Stream Chat user token |
+| `GET` | `/channels` | List available channels |
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `STREAM_API_KEY` | Stream Chat API key (public) |
+| `STREAM_API_SECRET` | Stream Chat API secret (server-side only) |

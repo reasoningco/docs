@@ -1,0 +1,50 @@
+---
+title: "Sous AI - Permission Scoping"
+description: "Understand how Sous AI respects RBAC permissions and location scoping."
+---
+
+Sous AI respects ChefOS RBAC permissions. Each capability is scoped to the user's role and section grants.
+
+## How It Works
+
+When Sous initializes, it receives the user's live permission context from `usePermissionsContext()`. It then:
+
+1. **Filters the route catalog** &mdash; only routes matching the user's permissions appear in search and suggestions
+2. **Validates navigation intents** &mdash; attempts to open a restricted route show a "contact your manager" message
+3. **Blocks report intents** &mdash; if the user has no inventory or sales read permissions
+4. **Filters suggestions** &mdash; the default suggestion chips only show accessible actions
+
+## Permission Map
+
+| Sous Capability | Required Permission |
+|---|---|
+| Open Inventory / Items / Waste | `inventory.items.read` |
+| Open Inventory Reports | `inventory.reports.read` |
+| Open Recipe Book / Menu Engineering | `inventory.recipes.read` |
+| Open Counts / Count Variance | `inventory.counts.read` |
+| Open Ordering / Vendors | `inventory.purchase_orders.read` |
+| Open Line Checks | `inventory.line_checks.read` |
+| Open Sales / Transactions / Items | `sales.analytics.read` |
+| Open Sales Reports / Upload | `sales.analytics.read` |
+| Open Scheduling | `scheduling.shifts.read` |
+| Open Employees | `scheduling.employees.read` |
+| Open Penalty Tracker | `scheduling.shifts.read` |
+| Open Messages | `chat.messaging.read` |
+| Run data reports | `inventory.reports.read` OR `sales.analytics.read` OR `inventory.items.read` |
+| Toggle notifications | _(always allowed &mdash; personal preferences)_ |
+| Schedule report delivery | `inventory.reports.read` |
+
+## Admin Override
+
+Users with `roleLevel: "admin"` bypass all permission checks &mdash; the full route catalog and all capabilities are available.
+
+## What Happens on Access Denied
+
+When a user tries to navigate to a route they don't have access to:
+
+```
+You: "Open Employees"
+Sous: "You don't have access to Employees. Contact your manager to request access."
+```
+
+Sous never reveals what data exists behind a restricted page.

@@ -1,0 +1,112 @@
+---
+title: "Architecture"
+description: "Review the ChefOS monorepo, app shell, API, worker, and shared package architecture."
+---
+
+## Monorepo Structure
+
+ChefOS uses **pnpm workspaces** with **Turbo** for task orchestration.
+
+```
+ChefOS/
+|-- apps/
+|   |-- web-os/          # Next.js 15 frontend shell (port 8009)
+|   |-- api/             # Fastify 4 API server (port 4000)
+|   |-- worker/          # BullMQ job processor
+|-- packages/
+|   |-- os-core/         # Window manager, event bus, Zustand store
+|   |-- app-inventory/   # Inventory feature app
+|   |-- app-scheduling/  # Scheduling feature app
+|   |-- app-sales/       # Sales feature app
+|   |-- app-messaging/   # Messaging feature app
+|   |-- domain-scheduling/  # Domain logic (OT calc, labor cost)
+|   |-- domain-inventory/   # Domain logic (food cost, recipes)
+|   |-- db/              # Prisma schema + migrations
+|   |-- queue/           # BullMQ queue types
+|   |-- types/           # Shared TypeScript types
+|   |-- ui/              # Shared UI components
+|-- services/
+|   |-- forecast/        # Python FastAPI ML sidecar (port 8001)
+```
+
+The developer docs live in the separate `reasoningco/docs` repository and publish to `developer.chefos.us`.
+
+## Window Manager
+
+The window manager in `os-core` manages the entire app lifecycle:
+
+- **`state/windowStore.tsx`** &mdash; Zustand store for window open/close/focus/minimize
+- **`windowing/snap.ts`** &mdash; Desktop-like window snapping algorithm
+- **`runtime/appRuntime.tsx`** &mdash; Mounts/unmounts app packages into windows
+- **`runtime/eventBus.ts`** &mdash; Cross-app event communication
+
+### App Module Convention
+
+Each app package exports from `src/index.ts`:
+
+```typescript
+// Default export: main app component
+export default App;
+
+// Named manifest export with metadata
+export const manifest = {
+  id: "inventory",
+  name: "Inventory",
+  icon: "/icons/inventory.svg",
+  defaultRoute: "/dashboard",
+  windowDefaults: { width: 1100, height: 700 },
+  capabilities: ["inventory.items.read"],
+};
+```
+
+## API Route Pattern
+
+All routes are `FastifyPluginAsync` functions with a mandatory `config.authz` block:
+
+```typescript
+const routes: FastifyPluginAsync = async (app) => {
+  app.get("/endpoint", {
+    config: { authz: { permission: "inventory.items.read", locationScoped: true } },
+  }, async (request, reply) => {
+    const { tenantId, userId } = request.auth;
+    // ...
+  });
+};
+```
+
+Route prefixes registered in `apps/api/src/index.ts`:
+
+| Prefix | Module |
+|---|---|
+| `/chefos/api/v1/inventory` | Inventory |
+| `/chefos/api/v1/scheduling` | Scheduling |
+| `/chefos/api/v1/sales` | Sales |
+| `/chefos/api/v1/chat` | Messaging |
+| `/chefos/api/v1/me` | Current user / permissions |
+| `/chefos/api/v1/sous` | Sous AI intent parsing |
+| `/chefos/api/v1/notifications` | Notification preferences |
+| `/chefos/api/v1/reports` | Report scheduling |
+
+## Data Flow
+
+```
+Browser
+  `-- Next.js shell (web-os)
+       `-- App packages (lazy-mounted into windows)
+            `-- apiFetch() -> Authorization: Bearer <JWT>
+                 `-- Fastify API (api)
+                      |-- authPlugin -> jwtVerify (HS256) + tenant resolve
+                      |-- authzPlugin -> RBAC permission check
+                      `-- Route handler -> Prisma / pgPool -> Supabase PostgreSQL
+```
+
+## Background Jobs
+
+The worker uses BullMQ with a single `"oscanvas"` queue. Job names are a TypeScript union in `packages/queue/src/index.ts`:
+
+| Job | Trigger | Description |
+|---|---|---|
+| `sales.upload.process` | File upload | Parse & import POS CSV |
+| `forecast.retrain.all` | Cron 4am daily | Retrain all location forecasts |
+| `forecast.retrain.location` | Post-upload | Retrain single location |
+| `notifications.send` | Events | Email/push notification dispatch |

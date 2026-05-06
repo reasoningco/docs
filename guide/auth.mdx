@@ -1,0 +1,67 @@
+---
+title: "Auth & Security"
+description: "Learn how authentication, tenant resolution, and production security work in ChefOS."
+---
+
+## Authentication Flow
+
+ChefOS uses **Supabase JWT authentication** (HS256) verified locally on the API server without a network round-trip to Supabase.
+
+### Token Lifecycle (Frontend)
+
+1. User signs in via `supabase.auth.signInWithPassword()` &mdash; access token stored in `localStorage` as `chefos.auth.token`
+2. `onAuthStateChange` listener in `OSShell` keeps the token fresh on `TOKEN_REFRESHED` events
+3. On page load, `getSession()` proactively refreshes if the token is expired or within 2 minutes of expiry
+4. All API calls attach `Authorization: Bearer <token>` via `getAuthHeader()`
+5. On 401 mid-session, a `chefos:refresh-token` event triggers `supabase.auth.refreshSession()` in the shell, then the request retries once
+
+### Token Verification (Backend)
+
+```typescript
+// apps/api/src/plugins/auth.ts
+await jwtVerify(token, secret, {
+  algorithms: ["HS256"],          // Pin &mdash; reject none/RS256/ES256
+  audience: "authenticated",       // Supabase audience claim
+  issuer: `https://<ref>.supabase.co/auth/v1`,
+  clockTolerance: 30,             // 30s skew tolerance
+});
+```
+
+### Dev Token
+
+Only active when **both** conditions are true:
+- `NODE_ENV !== "production"`
+- `AUTH_ALLOW_DEV_TOKEN=true` in environment
+
+Dev token value set via `AUTH_DEV_TOKEN` env var (default: `"dev"`).
+
+<Warning>
+The dev token is completely disabled in production. Setting `AUTH_ALLOW_DEV_TOKEN` in production has no effect because `NODE_ENV === "production"` is checked first.
+</Warning>
+
+## Tenant Resolution
+
+After JWT verification, tenant context is resolved in this order:
+
+1. **JWT claim** &mdash; `payload.tenant_id` or `payload.app_metadata.tenant_id`
+2. **DB lookup** &mdash; `SELECT tenant_id FROM org_membership WHERE user_id = $1`
+3. **Auto-provision** &mdash; create `org_membership` row for new users (dev/staging only, controlled by `AUTH_AUTO_PROVISION`)
+4. **Fail-closed** &mdash; if tenant cannot be resolved -> `401 Unauthorized`
+
+## Secrets Management
+
+All secrets are stored in **Infisical** (self-hosted at `secrets.reasoning.company`) and injected at startup via `infisical run`:
+
+```bash
+infisical run --env dev --domain https://secrets.reasoning.company/api -- turbo run dev
+```
+
+Key environment variables:
+
+| Variable | Description |
+|---|---|
+| `SUPABASE_JWT_SECRET` | HS256 signing secret for JWT verification |
+| `DATABASE_URL` | Postgres transaction pooler (runtime) |
+| `DATABASE_DIRECT_URL` | Direct Postgres connection (migrations) |
+| `REDIS_URL` | Redis for BullMQ |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase admin key (server-side only) |

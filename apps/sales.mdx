@@ -1,0 +1,65 @@
+---
+title: "Sales App"
+description: "Understand sales analytics, POS import, forecasting, and profitability reporting."
+---
+
+Handles POS data ingestion, transaction browsing, item analytics, forecasting, and profitability metrics.
+
+## Routes
+
+| Route | View | Permission |
+|---|---|---|
+| `/dashboard` | Sales overview + KPIs | `sales.analytics.read` |
+| `/transactions` | Transaction list | `sales.analytics.read` |
+| `/items` | Top items by revenue | `sales.analytics.read` |
+| `/reports` | Sales reports | `sales.analytics.read` |
+| `/upload` | Upload POS CSV | `sales.analytics.read` |
+
+## Dashboard KPIs
+
+The Sales dashboard shows these metrics for the selected date range:
+
+- **Total Sales** &mdash; aggregate revenue
+- **Transaction Count** &mdash; number of checks
+- **Avg Transaction** &mdash; average check size
+- **Labor Cost %** &mdash; labor cost as % of sales (cross-domain from Scheduling)
+- **Food Cost %** &mdash; blended food cost % (cross-domain from Inventory)
+- **Prime Cost %** &mdash; Labor % + Food Cost % (the restaurant's most important metric)
+
+## Profitability Breakdown
+
+A stacked bar chart shows the split between food cost, labor cost, and remaining profit margin in real time.
+
+## Sales Forecasting
+
+The ML forecast service (Python FastAPI sidecar) provides:
+- **7-day and 14-day forecasts** per location
+- Confidence bands (80% interval)
+- Cold-start handling: insufficient data -> naive average -> Prophet only -> full ensemble
+- Auto-retrain after every CSV upload
+
+```
+GET /chefos/api/v1/sales/forecast?locationId=loc_abc&horizon=7d
+```
+
+## Uploading POS Data
+
+Supported POS systems via CSV upload:
+
+1. Go to Sales -> Upload
+2. Select your POS system from the dropdown
+3. Upload a CSV file
+4. The worker processes it asynchronously &mdash; progress shown in real time
+
+## API Endpoints
+
+Base prefix: `/chefos/api/v1/sales`
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/summary` | Sales summary for date range |
+| `GET` | `/transactions` | Paginated transaction list |
+| `GET` | `/items` | Top items by revenue |
+| `POST` | `/upload` | Upload POS CSV |
+| `GET` | `/uploads` | Upload history |
+| `GET` | `/forecast` | ML forecast for location |

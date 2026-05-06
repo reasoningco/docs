@@ -1,0 +1,42 @@
+---
+title: "Sous AI"
+description: "Use Sous AI for navigation, reports, notification control, and scheduled reports."
+---
+
+Sous AI is the built-in assistant for ChefOS. It lives in every window corner as the **Sous button** and is also accessible globally via **`Cmd/Ctrl+K`** (the Spotlight).
+
+## What Sous Can Do
+
+Sous understands four types of requests:
+
+| Intent | What it does | Example |
+|---|---|---|
+| **Navigate** | Opens any app or page | `"Open Inventory Counts"` |
+| **Report** | Runs a natural-language data query | `"Show waste last 7 days"` |
+| **Notification** | Mutes or enables notification types | `"Mute all scheduling notifications"` |
+| **Schedule Report** | Sets up recurring email delivery | `"Email me the waste log daily at 8am"` |
+
+## How It Works
+
+1. User types a message in the Sous input
+2. The message is sent to `/chefos/api/v1/sous/parse` for LLM intent classification
+3. If the LLM is unavailable, a regex-based fallback classifies the intent
+4. The appropriate action is executed (open window, run API call, etc.)
+
+## Permission Scoping
+
+Sous respects your RBAC permissions:
+- Page suggestions and fuzzy search only show routes you have access to
+- Navigation to restricted pages shows a "contact your manager" message
+- Report queries require at least one read permission in inventory or sales
+- Suggestions are filtered to only show actions you can perform
+
+See [Permission Scoping](/sous-ai/permissions) for details.
+
+## Two Entry Points
+
+### Sous Spotlight (`Cmd/Ctrl+K`)
+Global command palette &mdash; accessible from anywhere in the OS. Best for navigation and quick lookups.
+
+### Sous Popover (button in each app)
+Context-aware chat panel attached to the app you're currently using. Best for conversational interactions.

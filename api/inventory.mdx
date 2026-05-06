@@ -1,0 +1,92 @@
+---
+title: "API - Inventory"
+description: "Use ChefOS inventory API routes for items, counts, recipes, ordering, and waste."
+---
+
+Base prefix: `/chefos/api/v1/inventory`
+
+## `GET /food-cost`
+
+Blended food cost percentage for a date range. Used by the Sales dashboard for Prime Cost calculation.
+
+**Query params:**
+
+| Param | Type | Description |
+|---|---|---|
+| `startDate` | `YYYY-MM-DD` | Start date (required) |
+| `endDate` | `YYYY-MM-DD` | End date (required) |
+| `locationId` | string | Filter to location |
+
+**Permission:** `inventory.read` (locationScoped)
+
+**Response:**
+
+```json
+{
+  "foodCostPct": 28.4,
+  "totalFoodCost": 13710.00,
+  "activeRecipeCount": 94,
+  "topItems": [
+    { "itemName": "Ribeye Steak", "costPct": 42.1, "margin": 57.9 }
+  ]
+}
+```
+
+## `GET /items`
+
+Item master list with optional search and filtering.
+
+**Query params:** `search`, `isActive`, `category`, `page`, `limit`
+
+**Permission:** `inventory.items.read`
+
+## `GET /waste`
+
+Waste log entries for a date range.
+
+**Query params:** `startDate`, `endDate`, `locationId`
+
+**Permission:** `inventory.items.read`
+
+## `GET /counts`
+
+Count sessions list.
+
+**Permission:** `inventory.counts.read`
+
+## `GET /counts/variance`
+
+Count variance report comparing actual vs theoretical quantities.
+
+**Permission:** `inventory.counts.read`
+
+## `GET /purchase-orders`
+
+Purchase order list with status filtering.
+
+**Query params:** `status`, `vendorId`, `page`, `limit`
+
+**Permission:** `inventory.purchase_orders.read`
+
+## `GET /vendors`
+
+Vendor list.
+
+**Permission:** `inventory.purchase_orders.read`
+
+## `POST /reports/smart`
+
+Run a natural-language inventory report query.
+
+**Body:**
+
+```json
+{
+  "question": "Show me waste cost for the last 30 days",
+  "startDate": "2026-02-05",
+  "endDate": "2026-03-07",
+  "limit": 20
+}
+```
+
+**Permission:** `inventory.reports.read`

@@ -1,0 +1,36 @@
+---
+title: "What is ChefOS?"
+description: "Understand ChefOS, its architecture, and the restaurant operating system model."
+---
+
+ChefOS is a restaurant management operating system delivered as a **desktop-like web application**. It renders feature apps &mdash; scheduling, inventory, sales, and messaging &mdash; inside draggable, snappable windows managed by a central window manager called `os-core`.
+
+## Core Idea
+
+Rather than juggling five separate tools, restaurant managers get a single OS experience in the browser. Apps open as windows on a desktop canvas. They share live data, a common auth layer, and a unified AI assistant called **Sous AI**.
+
+## Key Components
+
+| Component | Description |
+|---|---|
+| **web-os** | Next.js 15 shell with window manager, sidebar, and Sous AI |
+| **api** | Fastify 4 REST API server &mdash; all business logic lives here |
+| **worker** | BullMQ background job processor (forecasts, notifications, uploads) |
+| **os-core** | Zustand-based window state, snap engine, event bus |
+| **app-inventory** | Inventory, recipes, counting, ordering, line checks |
+| **app-scheduling** | Shifts, employees, time-off, shift trades |
+| **app-sales** | POS data, transactions, item analytics, profitability |
+| **app-messaging** | Stream Chat-powered real-time messaging |
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 18, TailwindCSS 3, Zustand
+- **Backend**: Fastify 4, Prisma 6, PostgreSQL (Supabase)
+- **Jobs**: BullMQ 5 + Redis
+- **Auth**: Supabase JWT (HS256) + deny-by-default RBAC
+- **AI**: OpenRouter (LLM intent parsing for Sous AI)
+- **Forecasting**: Python FastAPI sidecar &mdash; Prophet + LightGBM ensemble
+
+## Multi-Tenancy
+
+Every domain table includes a `tenantId` column. The auth plugin resolves tenant context on every request from the JWT claim or `org_membership` DB lookup &mdash; there are no defaults in production.

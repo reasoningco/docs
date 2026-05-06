@@ -1,0 +1,207 @@
+---
+title: "Sous AI - Capabilities & Example Prompts"
+description: "Review Sous AI intents, prompts, fallback behavior, and supported actions."
+---
+
+> **Living document.** This page is the source of truth for all Sous AI capabilities. Update it whenever a new intent, route, or command is added.
+>
+> Source: `apps/web-os/src/os/components/sous/`
+
+---
+
+## Navigation
+
+Sous can open any page in ChefOS by name, description, or natural-language reference. Use prefixes like `open`, `go to`, `navigate to`, `take me to`, `switch to`, or `launch` &mdash; or just type the page name directly.
+
+### Inventory
+
+| Prompt | Opens |
+|---|---|
+| `open inventory` | Inventory dashboard |
+| `go to items` | Item master list |
+| `show me waste log` | Waste Log |
+| `open inventory reports` | Smart NL Reports |
+| `recipe book` | Recipe Book |
+| `menu engineering` | Menu Engineering |
+| `inventory counts` | Count Sessions |
+| `start a new count` | New Count |
+| `count variance` | Count Variance |
+| `create order` | Create Purchase Order |
+| `orders receiving` | Orders & Receiving |
+| `vendors` | Vendor Management |
+| `line checks` | Active Line Checks |
+| `line check templates` | Check Templates |
+| `check history` | Line Check History |
+| `temperature analytics` | Line Check Analytics |
+
+### Sales
+
+| Prompt | Opens |
+|---|---|
+| `open sales` | Sales Overview |
+| `transactions` | Transactions |
+| `sales items` | Top Items by Revenue |
+| `sales reports` | Sales Reports |
+| `upload sales data` | POS Upload |
+
+### Scheduling
+
+| Prompt | Opens |
+|---|---|
+| `scheduling` | Schedule Calendar |
+| `go to schedule` | Schedule Calendar |
+| `employees` | Employee Roster |
+| `penalty tracker` | Penalty / Write-up Tracker |
+
+### Messaging
+
+| Prompt | Opens |
+|---|---|
+| `messages` | Team Chat |
+| `open messaging` | Team Chat |
+
+### New Tab
+
+Add `in a new tab` to open any page in a new OS window:
+
+```
+open inventory counts in a new tab
+go to vendors in a new tab
+```
+
+---
+
+## Data Reports
+
+Sous runs natural-language queries against your inventory and sales data. These are powered by the Smart Reports engine.
+
+**Requires:** at least one of `inventory.items.read`, `inventory.reports.read`, or `sales.analytics.read`
+
+### Example Prompts
+
+```
+Show waste last 7 days
+Waste cost this month
+What was our waste last week?
+```
+
+```
+Vendor price comparison for BEV-001
+Vendor pricing for category DAIRY
+```
+
+```
+Count accuracy variance this month
+Actual vs theoretical for this period
+```
+
+```
+Food cost breakdown last 30 days
+What items have the highest food cost?
+```
+
+```
+Show me sales data for last week
+Top sellers this month
+```
+
+```
+Temperature violations last 7 days
+Line check compliance this week
+```
+
+```
+Par level optimization for category PRODUCE
+Unit cost analysis for top 20 items
+```
+
+---
+
+## Notification Management
+
+Sous can toggle individual notification types or entire categories on/off.
+
+**Always allowed** &mdash; notification preferences are personal settings, no extra permission required.
+
+### Mute / Enable Individual Types
+
+```
+Mute shift reminder notifications
+Enable trade request notifications
+Turn off low stock alerts
+Disable expiring inventory notifications
+```
+
+**Available notification types:**
+
+| Type | Description |
+|---|---|
+| `scheduling.week_published` | Weekly schedule published |
+| `scheduling.shift_changed` | Your shift was changed |
+| `scheduling.shift_reminder` | Shift starting reminder |
+| `scheduling.trade_requested` | Someone requested a trade |
+| `scheduling.trade_resolved` | Trade accepted/declined |
+| `scheduling.timeoff_resolved` | Time-off request decision |
+| `inventory.low_stock` | Item below par level |
+| `inventory.expiring` | Item approaching expiry |
+| `orders.new_order` | New purchase order created |
+| `orders.status_changed` | Order status updated |
+| `system.update` | System update available |
+| `system.security` | Security alert |
+
+### Mute / Enable Categories
+
+```
+Mute all scheduling notifications
+Enable all inventory notifications
+Disable all order notifications
+Turn off all system notifications
+```
+
+**Available categories:** `scheduling`, `inventory`, `orders`, `system`
+
+---
+
+## Scheduled Report Delivery
+
+Sous can set up recurring report emails on your behalf.
+
+**Requires:** `inventory.reports.read` or relevant module read permission
+
+### Frequencies
+
+| Frequency | Example |
+|---|---|
+| Daily | `Email me the waste log daily at 8am` |
+| Weekly | `Send me the count variance report every Monday at 9am` |
+| Monthly | `Email the food cost report on the 1st of every month at 7am` |
+
+### Example Prompts
+
+```
+Email me waste log report daily at 8am
+Send me the inventory variance report every Monday at 9am
+Email me the sales report daily at 7am
+Schedule the food cost report monthly on the 1st at 8am
+Send the count accuracy report to manager@restaurant.com weekly on Friday at 5pm
+```
+
+### Available Report IDs
+
+| Report ID | Description |
+|---|---|
+| `analytics.waste_log` | Waste log summary |
+| `analytics.count_variance` | Count variance / accuracy |
+| `analytics.food_cost` | Food cost breakdown |
+| `analytics.sales_summary` | Sales overview |
+| `analytics.labor_cost` | Labor cost summary |
+
+---
+
+## Tips
+
+- **Fuzzy matching** &mdash; Sous tolerates typos and partial names. `"vendore"` still opens Vendors.
+- **Context-aware** &mdash; Sous only suggests routes you have permission to access
+- **LLM + regex** &mdash; Intent parsing uses an LLM with a regex fallback, so Sous works even when offline
+- **Keyboard first** &mdash; `Cmd/Ctrl+K` opens Spotlight from anywhere. `Esc` closes it.
+- **Arrow keys** &mdash; Navigate suggestions with `up/down`, activate with `Enter`
