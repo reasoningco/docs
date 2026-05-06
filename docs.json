@@ -74,14 +74,9 @@
     "global": {
       "anchors": [
         {
-          "anchor": "ChefOS",
+          "anchor": "Main site",
           "href": "https://chefos.us",
           "icon": "house"
-        },
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com/reasoningco/ChefOS",
-          "icon": "github"
         }
       ]
     }
@@ -99,7 +94,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Open ChefOS",
+      "label": "Main site",
       "href": "https://chefos.us"
     }
   },
@@ -114,10 +109,5 @@
       "cursor",
       "vscode"
     ]
-  },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/reasoningco/docs"
-    }
   }
 }
