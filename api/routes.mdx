@@ -1,16 +1,16 @@
 ---
 title: "Endpoint index"
-description: "Browse the ChefOS API route surface by domain."
+description: "Browse public ChefOS API route groups by domain."
 ---
 
-This index lists the developer-facing route groups currently exposed by the ChefOS backend. Every protected endpoint uses the `/api/v1` prefix.
+This index lists public ChefOS API route groups by domain. Every protected endpoint uses the `/api/v1` prefix.
 
 ## Fundamentals
 
 | Domain | Endpoints |
 |---|---|
 | Health | `GET /api/v1/health`, `GET /api/v1/ready`, `GET /api/v1/health/redis` |
-| Auth | `POST /api/v1/auth/sign-in`, `POST /api/v1/auth/refresh`, `POST /api/v1/auth/sign-out`, `POST /api/v1/auth/reset-password`, `POST /api/v1/auth/resolve-username`, `GET /api/v1/auth/organizations` |
+| Auth | `POST /api/v1/auth/sign-in`, `POST /api/v1/auth/refresh`, `POST /api/v1/auth/sign-out`, `POST /api/v1/auth/reset-password`, `POST /api/v1/auth/resolve-username`, `POST /api/v1/auth/invitation/validate`, `POST /api/v1/auth/invitation/accept`, `GET /api/v1/auth/organizations` |
 | MFA | `GET /api/v1/auth/mfa-policy`, `GET /api/v1/auth/2fa/status`, `POST /api/v1/auth/2fa/enroll`, `POST /api/v1/auth/2fa/challenge`, `POST /api/v1/auth/2fa/verify`, `DELETE /api/v1/auth/2fa/unenroll/:factorId` |
 | Account context | `GET /api/v1/me/permissions`, `GET /api/v1/me/preferences/widgets`, `PUT /api/v1/me/preferences/widgets`, `GET /api/v1/me/preferences/appearance`, `PUT /api/v1/me/preferences/appearance` |
 | Profile | `GET /api/v1/profile`, `PATCH /api/v1/profile`, `PATCH /api/v1/profile/password`, `POST /api/v1/profile/avatar` |
@@ -22,8 +22,8 @@ This index lists the developer-facing route groups currently exposed by the Chef
 | Locations | `/api/v1/locations`, `/api/v1/locations/mine`, `/api/v1/locations/stats`, `/api/v1/locations/assets`, `/api/v1/locations/workorders`, `/api/v1/stations` |
 | Sales | `/api/v1/sales/uploads`, `/api/v1/sales/transactions`, `/api/v1/sales/summary`, `/api/v1/sales/trend`, `/api/v1/sales/top-items`, `/api/v1/sales/forecast` |
 | Budgets | `/api/v1/sales/budgets`, `/api/v1/sales/budgets/targets`, `/api/v1/sales/budgets/categories`, `/api/v1/sales/budgets/wallet`, `/api/v1/sales/budgets/alerts` |
-| Scheduling | `/api/v1/scheduling/me`, `/api/v1/scheduling/positions`, `/api/v1/scheduling/templates`, `/api/v1/scheduling/time-off/settings`, `/api/v1/scheduling/meal-config`, `/api/v1/open-shifts` |
-| Inventory | `/api/v1/inventory/items`, `/api/v1/inventory/vendors`, `/api/v1/inventory/counts`, `/api/v1/inventory/purchase-orders`, `/api/v1/inventory/invoices`, `/api/v1/inventory/recipes`, `/api/v1/inventory/line-check-runs` |
+| Scheduling | `/api/v1/scheduling/me`, `/api/v1/scheduling/employees`, `/api/v1/scheduling/positions`, `/api/v1/scheduling/shifts`, `/api/v1/scheduling/templates`, `/api/v1/scheduling/time-off-requests`, `/api/v1/scheduling/trades`, `/api/v1/scheduling/meal-config`, `/api/v1/open-shifts` |
+| Inventory | `/api/v1/inventory/items`, `/api/v1/inventory/vendors`, `/api/v1/inventory/counts`, `/api/v1/inventory/purchase-orders`, `/api/v1/inventory/invoices`, `/api/v1/inventory/recipes`, `/api/v1/inventory/recipe-scans`, `/api/v1/inventory/receipt-scans`, `/api/v1/inventory/line-check-runs`, `/api/v1/inventory/haccp-runs`, `/api/v1/inventory/cycle-menus` |
 | POS | `/api/v1/pos/settings`, `/api/v1/pos/catalog`, `/api/v1/pos/sales`, `/api/v1/pos/payments`, `/api/v1/pos/shifts`, `/api/v1/pos/days` |
 | Reservations | `/api/v1/reservations`, `/api/v1/reservations/upcoming`, `/api/v1/reservations/stats/overview`, `/api/v1/reservations/providers`, `/api/v1/reservations/config/active` |
 | Commissary | `/api/v1/commissary/settings`, `/api/v1/commissary/catalog`, `/api/v1/commissary/orders`, `/api/v1/commissary/sync-vendors` |
@@ -40,15 +40,4 @@ This index lists the developer-facing route groups currently exposed by the Chef
 | Sous AI | `/api/v1/sous/parse`, `/api/v1/sous/briefing`, `/api/v1/sous/smart-order-po`, `/api/v1/sous/prep-list`, `/api/v1/sous/staff-message/draft` |
 | Voice agent | `/api/v1/voice-agent`, `/api/v1/voice-agent/connect`, `/api/v1/voice-agent/provision`, `/api/v1/voice-agent/sync`, `/api/v1/voice-agent/call-logs` |
 | Billing | `/api/v1/billing/status`, `/api/v1/billing/invoices`, `/api/v1/billing/payment-methods`, `/api/v1/billing/checkout`, `/api/v1/billing/portal` |
-| Employee mobile | `/api/v1/employee-self-service`, `/api/v1/employee-availability`, `/api/v1/employee-calendar`, `/api/v1/mobile/manager` |
-
-## Internal or limited-access surfaces
-
-Some registered routes are intended for ChefOS staff tools, support, infrastructure, or provider callbacks. They may require separate approval or may not be available to partner API clients.
-
-| Route group | Notes |
-|---|---|
-| `/api/v1/admin`, `/api/v1/admin-console`, `/api/v1/admin/queues` | Staff and tenant administration |
-| `/api/v1/proxy`, `/api/v1/browser` | Controlled browser/proxy tools |
-| `/api/v1/demo`, `/api/v1/onboarding` | Demo and signup workflows |
-| `/public/bids` | Public vendor bid portal links outside `/api/v1` |
+| Employee mobile | `/api/v1/employee-self-service`, `/api/v1/employee-availability`, `/api/v1/employee-calendar`, `/api/v1/open-shifts`, `/api/v1/push-notifications`, `/api/v1/mobile/manager` |

@@ -10,12 +10,46 @@ Employee self-service endpoints are designed for experiences where the authentic
 | Endpoint | Use it for |
 |---|---|
 | `GET /api/v1/scheduling/me` | Resolve the current employee profile |
+| `PATCH /api/v1/employee-self-service/profile` | Update employee profile fields |
+| `GET /api/v1/employee-self-service/alert-dates` | Read employee alert dates |
+| `GET /api/v1/employee-self-service/shift-history` | Read past shifts |
+| `POST /api/v1/employee-self-service/confirm-week` | Confirm a published week |
 | `GET /api/v1/employee-self-service/my-notifications` | Read employee notifications |
+| `GET /api/v1/employee-self-service/upcoming-shifts` | Read upcoming shifts |
+| `GET /api/v1/employee-self-service/shifts/:shiftId/manager-tasks` | Read manager tasks for one shift |
+| `POST /api/v1/employee-self-service/shifts/:shiftId/manager-tasks/:taskId/start` | Start a manager task |
+| `POST /api/v1/employee-self-service/shifts/:shiftId/manager-tasks/:taskId/complete` | Complete a manager task |
+| `GET /api/v1/employee-self-service/line-check-templates/:id` | Read a line-check template |
+| `POST /api/v1/employee-self-service/line-check-runs` | Start a line-check run |
+| `POST /api/v1/employee-self-service/line-check-runs/:id/responses` | Submit line-check responses |
+| `POST /api/v1/employee-self-service/line-check-runs/:id/complete` | Complete a line-check run |
+| `GET /api/v1/employee-self-service/counts/:id` | Read an assigned count |
+| `PATCH /api/v1/employee-self-service/counts/:id/lines` | Update count lines |
+| `POST /api/v1/employee-self-service/counts/:id/complete` | Complete a count |
 | `POST /api/v1/employee-self-service/uploads/line-check-photo` | Upload a line-check response photo |
 | `GET /api/v1/employee-availability/availability` | Read current availability |
+| `PUT /api/v1/employee-availability/availability` | Replace availability |
+| `PATCH /api/v1/employee-availability/:id` | Update one availability entry |
+| `DELETE /api/v1/employee-availability/:id` | Delete one availability entry |
 | `GET /api/v1/employee-calendar/connections` | Read connected calendars |
-| `/api/v1/open-shifts` | Read and claim open shifts when enabled |
+| `POST /api/v1/employee-calendar/connections` | Create a calendar connection |
+| `DELETE /api/v1/employee-calendar/connections/:id` | Remove a calendar connection |
+| `GET /api/v1/employee-calendar/shifts` | Read shifts for calendar sync |
+| `GET /api/v1/employee-calendar/events` | Read employee calendar events |
+| `POST /api/v1/employee-calendar/events` | Create a calendar event |
+| `DELETE /api/v1/employee-calendar/events/:id` | Delete a calendar event |
+| `GET /api/v1/employee-calendar/export-ical` | Export iCal feed |
+| `GET /api/v1/open-shifts` | List open shifts |
+| `GET /api/v1/open-shifts/:id` | Read one open shift |
+| `GET /api/v1/open-shifts/:id/qualified-employees` | List qualified employees |
+| `POST /api/v1/open-shifts/:id/claim` | Claim an open shift |
+| `DELETE /api/v1/open-shifts/claims/:claimId` | Cancel a claim |
+| `POST /api/v1/open-shifts/claims/:claimId/approve` | Approve a claim |
+| `POST /api/v1/open-shifts/claims/:claimId/reject` | Reject a claim |
 | `GET /api/v1/push-notifications/push-tokens` | List registered push tokens |
+| `POST /api/v1/push-notifications/push-tokens` | Register a push token |
+| `DELETE /api/v1/push-notifications/push-tokens` | Delete a push token |
+| `POST /api/v1/push-notifications/push-tokens/test` | Send a test push |
 | `GET /api/v1/notifications/catalog` | Read notification preference catalog |
 | `PUT /api/v1/notifications/preferences/:type` | Update notification preference |
 

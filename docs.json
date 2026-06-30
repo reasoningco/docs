@@ -17,6 +17,7 @@
             "group": "Start here",
             "pages": [
               "index",
+              "guide/api-access",
               "guide/quickstart",
               "guide/what-is-chefos",
               "guide/architecture",

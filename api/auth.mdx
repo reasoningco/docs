@@ -12,6 +12,8 @@ Use auth and account endpoints to resolve login context, refresh sessions, inspe
 | `POST /api/v1/auth/sign-out` | End the current session |
 | `POST /api/v1/auth/reset-password` | Start password reset |
 | `POST /api/v1/auth/resolve-username` | Resolve a username when enabled for the organization |
+| `POST /api/v1/auth/invitation/validate` | Validate an invitation token |
+| `POST /api/v1/auth/invitation/accept` | Accept an invitation and create or activate account access |
 | `GET /api/v1/auth/organizations` | List organizations available during login |
 | `GET /api/v1/auth/mfa-policy` | Read MFA policy for the current user |
 | `GET /api/v1/auth/2fa/status` | Read enrolled factors |

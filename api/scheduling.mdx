@@ -5,22 +5,113 @@ description: "Use scheduling endpoints for employees, shifts, time off, availabi
 
 Scheduling endpoints support employee roster sync, schedule publishing, templates, time off, availability, meals, manager tasks, and labor reporting.
 
+## Employees and positions
+
 | Endpoint | Use it for |
 |---|---|
 | `GET /api/v1/scheduling/me` | Resolve the current employee and schedule context |
+| `GET /api/v1/scheduling/schedule-bootstrap` | Load schedule bootstrap data |
+| `GET /api/v1/scheduling/employees` | List employees |
+| `POST /api/v1/scheduling/employees` | Create an employee |
+| `GET /api/v1/scheduling/employees/:id` | Read one employee |
+| `PATCH /api/v1/scheduling/employees/:id` | Update an employee |
+| `DELETE /api/v1/scheduling/employees/:id` | Soft-delete an employee |
+| `POST /api/v1/scheduling/employees/:id/restore` | Restore a deleted employee |
+| `GET /api/v1/scheduling/employees/deleted` | Read recently deleted employees |
 | `GET /api/v1/scheduling/positions` | List schedulable positions |
+| `POST /api/v1/scheduling/positions` | Create a position |
+| `PATCH /api/v1/scheduling/positions/:id` | Update a position |
+| `DELETE /api/v1/scheduling/positions/:id` | Delete a position |
+| `GET /api/v1/scheduling/employee-positions` | Read employee-position assignments |
+| `PUT /api/v1/scheduling/employees/:id/positions` | Replace employee-position assignments |
+| `POST /api/v1/scheduling/employee-positions/toggle` | Toggle one employee-position assignment |
+| `PATCH /api/v1/scheduling/employee-positions/pay-rate` | Update position pay rate |
+
+## Scheduling data
+
+| Endpoint | Use it for |
+|---|---|
 | `GET /api/v1/scheduling/categories` | List schedule categories |
 | `GET /api/v1/scheduling/categories/all` | List all categories for management views |
+| `POST /api/v1/scheduling/categories` | Create a category |
+| `PUT /api/v1/scheduling/categories/:id` | Update a category |
+| `DELETE /api/v1/scheduling/categories/:id` | Delete a category |
+| `GET /api/v1/scheduling/weeks` | List schedule weeks |
+| `POST /api/v1/scheduling/weeks/publish` | Publish a week |
+| `POST /api/v1/scheduling/weeks/unpublish` | Unpublish a week |
+| `GET /api/v1/scheduling/shifts` | List shifts |
+| `POST /api/v1/scheduling/shifts` | Create a shift |
+| `GET /api/v1/scheduling/shifts/:id` | Read one shift |
+| `PATCH /api/v1/scheduling/shifts/:id` | Update a shift |
+| `DELETE /api/v1/scheduling/shifts/:id` | Delete a shift |
+| `POST /api/v1/scheduling/shifts/bulk-create` | Create shifts in bulk |
+| `POST /api/v1/scheduling/shifts/bulk-delete` | Delete shifts in bulk |
 | `GET /api/v1/scheduling/templates` | List schedule templates |
-| `GET /api/v1/scheduling/employees/deleted` | Read recently deleted employees |
-| `GET /api/v1/scheduling/employee-positions` | Read employee-position assignments |
-| `GET /api/v1/scheduling/employee-notifications` | Read employee notification settings |
-| `GET /api/v1/scheduling/alert-dates` | Read schedule alert dates |
+| `POST /api/v1/scheduling/templates` | Create a template |
+| `POST /api/v1/scheduling/templates/apply` | Apply a template |
+| `GET /api/v1/scheduling/footfall` | Read footfall data |
+| `GET /api/v1/scheduling/staffing-recommendation` | Read staffing recommendation |
+| `GET /api/v1/scheduling/labor-cost` | Read labor cost summary |
+| `GET /api/v1/scheduling/staffing-suggestions` | Read staffing suggestions |
+
+## Time off and shift trades
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/scheduling/time-off-requests` | List time-off requests |
+| `POST /api/v1/scheduling/time-off-requests` | Create a time-off request |
+| `PATCH /api/v1/scheduling/time-off-requests/:id/review` | Approve or reject a request |
+| `DELETE /api/v1/scheduling/time-off-requests/:id` | Cancel or delete a request |
+| `GET /api/v1/scheduling/time-off/grid` | Read time-off grid data |
+| `GET /api/v1/scheduling/time-off/blocked-days` | List blocked days |
+| `POST /api/v1/scheduling/time-off/blocked-days` | Create a blocked day |
 | `GET /api/v1/scheduling/time-off/settings` | Read time-off rules |
+| `PUT /api/v1/scheduling/time-off/settings` | Update time-off rules |
+| `GET /api/v1/scheduling/trades` | List tradeboard posts |
+| `POST /api/v1/scheduling/trades` | Create a tradeboard post |
+| `PATCH /api/v1/scheduling/trades/:id/cancel` | Cancel a tradeboard post |
+| `GET /api/v1/scheduling/trade-requests` | List trade requests |
+| `POST /api/v1/scheduling/trade-requests` | Create a trade request |
+| `PATCH /api/v1/scheduling/trade-requests/:id/accept` | Accept a trade request |
+| `PATCH /api/v1/scheduling/trade-requests/:id/reject` | Reject a trade request |
+| `POST /api/v1/scheduling/trade-requests/:id/approve` | Manager approve a trade request |
+| `POST /api/v1/scheduling/trade-requests/:id/deny` | Manager deny a trade request |
 | `GET /api/v1/scheduling/tradeboard-permissions` | Read shift-trade permission settings |
+| `PUT /api/v1/scheduling/tradeboard-permissions` | Update shift-trade permission settings |
+
+## Notifications and tasks
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/scheduling/employee-notifications` | Read employee notification settings |
+| `PUT /api/v1/scheduling/employee-notifications` | Update employee notification settings |
+| `GET /api/v1/scheduling/alert-dates` | Read schedule alert dates |
+| `POST /api/v1/scheduling/alert-dates` | Create an alert date |
+| `PATCH /api/v1/scheduling/alert-dates/:id` | Update an alert date |
+| `POST /api/v1/scheduling/alert-dates/:id/complete` | Complete an alert date |
+| `GET /api/v1/scheduling/notification-status` | Read notification status |
+| `PUT /api/v1/scheduling/notification-status` | Update notification status |
+| `GET /api/v1/scheduling/notification-logs` | Read notification logs |
+| `GET /api/v1/scheduling/positions/:positionId/task-templates` | List task templates for a position |
+| `POST /api/v1/scheduling/positions/:positionId/task-templates` | Create a task template |
+| `PATCH /api/v1/scheduling/task-templates/:id` | Update a task template |
+| `GET /api/v1/scheduling/shifts/:id/tasks` | List tasks on a shift |
+| `POST /api/v1/scheduling/shifts/:id/tasks` | Add a task to a shift |
+| `PATCH /api/v1/scheduling/shifts/:id/tasks/:taskId` | Update a shift task |
+| `POST /api/v1/scheduling/shifts/:shiftId/manager-tasks` | Assign manager tasks |
 | `GET /api/v1/scheduling/manager-task-options/line-check-templates` | List line-check templates available to manager tasks |
 | `GET /api/v1/scheduling/manager-task-options/inventory-counts` | List inventory counts available to manager tasks |
 | `GET /api/v1/scheduling/penalties/reasons` | List points/penalty reasons |
+| `GET /api/v1/scheduling/penalties` | List employee penalties |
+| `POST /api/v1/scheduling/penalties` | Create an employee penalty |
+
+## External imports and employee routes
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/scheduling/w2w/employees` | Preview WhenToWork employee import data |
+| `GET /api/v1/scheduling/w2w/positions` | Preview WhenToWork position import data |
+| `GET /api/v1/scheduling/w2w/shifts` | Preview WhenToWork shift import data |
 | `GET /api/v1/employee-availability/availability` | Read employee availability |
 | `GET /api/v1/employee-calendar/connections` | Read employee calendar connections |
 | `/api/v1/open-shifts` | Manage open-shift workflows when enabled |

@@ -1,0 +1,88 @@
+---
+title: "Get API access"
+description: "Understand how ChefOS API access is provisioned, scoped, and used."
+---
+
+ChefOS API access is permissioned by organization, user or integration identity, location, and scope. A token can only read or write data that it has been granted.
+
+## Who can request access
+
+| Requester | Typical path |
+|---|---|
+| Restaurant operator | Ask a ChefOS organization admin or ChefOS support to enable API access |
+| Integration partner | Ask the customer organization to approve the integration, then request scoped credentials |
+| Internal automation owner | Request a token scoped to the exact workflow and locations it needs |
+
+For access help, contact the ChefOS team at [support@chefos.us](mailto:support@chefos.us).
+
+## What you need
+
+Before making API calls, get these values:
+
+| Value | Description |
+|---|---|
+| API base URL | The ChefOS API origin for the environment you are using |
+| Bearer token | The token used in the `Authorization` header |
+| Location ID | Required for most operational endpoints |
+| Scopes or permissions | The domains and actions your token can perform |
+
+## Access model
+
+ChefOS evaluates every protected request against:
+
+| Control | What it protects |
+|---|---|
+| Organization | Keeps data isolated to the approved ChefOS organization |
+| Location | Limits reads and writes to approved restaurants, stores, kitchens, or sublocations |
+| Permission | Limits actions by domain, resource, and operation |
+| Environment | Keeps test credentials and live credentials separate |
+
+## First verification calls
+
+After receiving a token, verify it before building a workflow.
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/me/permissions" \
+  -H "Authorization: Bearer $CHEFOS_TOKEN"
+```
+
+Then list the locations available to the token:
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/locations/mine" \
+  -H "Authorization: Bearer $CHEFOS_TOKEN"
+```
+
+Use one of the returned location IDs on location-scoped requests:
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/sales/summary?startDate=2026-06-01&endDate=2026-06-30" \
+  -H "Authorization: Bearer $CHEFOS_TOKEN" \
+  -H "X-Location-Id: $CHEFOS_LOCATION_ID"
+```
+
+## Token handling
+
+- Store tokens only in a server-side secret manager.
+- Do not place tokens in browser code, mobile apps, public repositories, screenshots, or logs.
+- Request read-only access first when the workflow does not need writes.
+- Use separate tokens for separate systems or vendors.
+- Rotate a token immediately if it is exposed outside the approved system.
+
+## Recommended access request
+
+When requesting access, include:
+
+| Field | Example |
+|---|---|
+| Integration name | `Finance BI dashboard` |
+| Environment | `Sandbox` or `Production` |
+| Domains | `Sales`, `Inventory`, `Reports` |
+| Access level | `Read-only` |
+| Locations | `All approved locations` or specific location IDs |
+| Contact | Technical owner and support email |
+| Purpose | What the integration reads, writes, or automates |
+
+## Next step
+
+Once your token works, continue with the [Quickstart](/guide/quickstart) and then review [Request conventions](/guide/requests).

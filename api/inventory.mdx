@@ -84,6 +84,10 @@ Inventory endpoints support operational workflows around items, vendors, purchas
 | `POST /api/v1/inventory/recipes/import` | Import recipe data |
 | `POST /api/v1/inventory/recipe-scans` | Submit recipe scan |
 | `GET /api/v1/inventory/recipe-scans` | List recipe scans |
+| `GET /api/v1/inventory/recipe-scans/:id` | Read one recipe scan |
+| `POST /api/v1/inventory/recipe-scans/:id/rescan` | Re-run recipe scan parsing |
+| `GET /api/v1/inventory/recipe-scans/:id/match-suggestions` | Read ingredient match suggestions |
+| `POST /api/v1/inventory/recipe-scans/:id/commit` | Commit a scanned recipe |
 | `POST /api/v1/inventory/recipes/:id/ingredients` | Add an ingredient |
 | `PUT /api/v1/inventory/recipes/:id/ingredients/:ingredientId` | Update an ingredient |
 | `GET /api/v1/inventory/recipes/:id/cost-snapshots` | Read cost snapshots |
@@ -95,7 +99,69 @@ Inventory endpoints support operational workflows around items, vendors, purchas
 | `POST /api/v1/inventory/line-check-runs` | Start a line-check run |
 | `GET /api/v1/inventory/line-check-analytics` | Read line-check analytics |
 | `POST /api/v1/inventory/haccp-runs` | Start a HACCP run |
+| `GET /api/v1/inventory/haccp-runs` | List HACCP runs |
+| `GET /api/v1/inventory/haccp-runs/:id` | Read one HACCP run |
+| `POST /api/v1/inventory/haccp-runs/:id/readings` | Submit HACCP readings |
+| `POST /api/v1/inventory/haccp-runs/:id/complete` | Complete a HACCP run |
 | `GET /api/v1/inventory/reports/haccp-compliance` | Read HACCP compliance report |
+
+## Receipt and invoice ingestion
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/email-connectors` | List inbound email connectors |
+| `POST /api/v1/inventory/email-connectors` | Create an inbound email connector |
+| `PATCH /api/v1/inventory/email-connectors/:id` | Update an inbound email connector |
+| `DELETE /api/v1/inventory/email-connectors/:id` | Delete an inbound email connector |
+| `POST /api/v1/inventory/email-connectors/:id/test` | Test an inbound email connector |
+| `POST /api/v1/inventory/email-connectors/outlook/start` | Start Outlook connector authorization |
+| `GET /api/v1/inventory/email-connectors/outlook/callback` | Receive Outlook connector callback |
+| `POST /api/v1/inventory/email-connectors/outlook/disconnect` | Disconnect Outlook connector |
+| `GET /api/v1/inventory/invoice-inbox` | Read invoice inbox |
+| `POST /api/v1/inventory/receipt-scans` | Submit receipt scan |
+| `GET /api/v1/inventory/receipt-scans` | List receipt scans |
+| `GET /api/v1/inventory/receipt-scans/:id` | Read one receipt scan |
+| `POST /api/v1/inventory/receipt-scans/:id/rescan` | Re-run receipt scan parsing |
+| `GET /api/v1/inventory/receipt-scans/:id/match-suggestions` | Read receipt line match suggestions |
+| `POST /api/v1/inventory/receipt-scans/:id/commit` | Commit a scanned receipt |
+
+## Reports and operational intelligence
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/food-cost` | Read food cost summary |
+| `GET /api/v1/inventory/smart-order-suggestions` | Read suggested ordering needs |
+| `GET /api/v1/inventory/upcoming-deliveries` | Read upcoming deliveries |
+| `GET /api/v1/inventory/cost-change-alerts` | Read cost change alerts |
+| `GET /api/v1/inventory/theoretical-food-cost` | Read theoretical food cost |
+| `GET /api/v1/inventory/waste-by-shift` | Read waste by shift |
+| `GET /api/v1/inventory/86-risk` | Read projected stockout risk |
+| `GET /api/v1/inventory/line-check-compliance` | Read line-check compliance |
+| `GET /api/v1/inventory/theoretical-usage` | Read theoretical usage |
+| `GET /api/v1/inventory/price-trends` | Read price trends |
+| `GET /api/v1/inventory/vendor-price-history` | Read vendor price history |
+| `GET /api/v1/inventory/vendors/:vendorId/scorecard` | Read vendor scorecard |
+
+## Cycle menus and production
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/cycle-menus` | List cycle menus |
+| `POST /api/v1/inventory/cycle-menus` | Create a cycle menu |
+| `GET /api/v1/inventory/cycle-menus/:id` | Read one cycle menu |
+| `PUT /api/v1/inventory/cycle-menus/:id` | Update a cycle menu |
+| `DELETE /api/v1/inventory/cycle-menus/:id` | Delete a cycle menu |
+| `POST /api/v1/inventory/cycle-menus/:id/entries` | Add cycle menu entries |
+| `PUT /api/v1/inventory/cycle-menu-entries/:entryId` | Update a cycle menu entry |
+| `DELETE /api/v1/inventory/cycle-menu-entries/:entryId` | Delete a cycle menu entry |
+| `POST /api/v1/inventory/cycle-menus/:id/share-links` | Create a public menu share link |
+| `GET /api/v1/inventory/menus/public/:shareToken` | Read public shared menu data |
+| `GET /api/v1/inventory/production-schedules` | List production schedules |
+| `POST /api/v1/inventory/production-schedules` | Create a production schedule |
+| `PUT /api/v1/inventory/production-schedules/:id` | Update a production schedule |
+| `DELETE /api/v1/inventory/production-schedules/:id` | Delete a production schedule |
+| `GET /api/v1/inventory/production-schedules/demand` | Read ingredient demand from production schedules |
+| `POST /api/v1/inventory/recipes/:id/produce` | Record recipe production |
 
 ## Vendor quotes
 
