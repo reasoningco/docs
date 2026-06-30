@@ -1,0 +1,67 @@
+---
+title: "POS and payments API"
+description: "Use POS endpoints for register settings, catalog reads, sales, refunds, shift closeout, and payment status."
+---
+
+POS APIs power ChefOS Register and payment-connected checkout flows.
+
+## Register
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/pos/settings` | Read register settings |
+| `PATCH /api/v1/pos/settings` | Update register settings |
+| `GET /api/v1/pos/customer-display/link` | Create or read a customer display link |
+| `POST /api/v1/pos/customer-display/state` | Publish customer display state |
+| `GET /api/v1/pos/customer-display/actions` | Read customer display actions |
+| `GET /api/v1/pos/catalog` | Read sellable catalog items |
+| `PATCH /api/v1/pos/catalog/prices` | Update catalog prices |
+| `POST /api/v1/pos/catalog/items` | Create a sellable catalog item |
+| `PATCH /api/v1/pos/catalog/items/:id/upc` | Update a catalog item UPC |
+| `POST /api/v1/pos/upc-resolve` | Resolve a scanned UPC |
+| `POST /api/v1/pos/sales` | Create a POS sale |
+| `GET /api/v1/pos/sales/recent` | Read recent sales |
+| `POST /api/v1/pos/sales/:dbId/refund` | Refund a sale when enabled |
+| `POST /api/v1/pos/sales/:dbId/receipt` | Send or record receipt delivery |
+| `GET /api/v1/pos/exports/:kind` | Export transactions, items, refunds, payments, or closeout data |
+
+## Payments
+
+| Endpoint | Use it for |
+|---|---|
+| `POST /api/v1/pos/payments/connection-token` | Create a terminal connection token |
+| `GET /api/v1/pos/payments/status` | Read payment processor status |
+| `GET /api/v1/pos/payments/connect/status` | Read Stripe Connect state |
+| `POST /api/v1/pos/payments/connect/start` | Start connect onboarding |
+| `POST /api/v1/pos/payments/connect/session` | Start connect onboarding |
+| `GET /api/v1/pos/payments/overview` | Read payment overview |
+| `GET /api/v1/pos/payments/balance` | Read balance summary |
+| `GET /api/v1/pos/payments/payouts` | List payouts |
+| `POST /api/v1/pos/payments/payouts` | Create a payout |
+| `GET /api/v1/pos/payments/balance-transactions` | List balance transactions |
+| `GET /api/v1/pos/payments/readers` | List payment readers |
+| `POST /api/v1/pos/payments/readers` | Register a reader |
+| `PATCH /api/v1/pos/payments/readers/:id` | Update a reader |
+| `DELETE /api/v1/pos/payments/readers/:id` | Delete a reader |
+| `POST /api/v1/pos/payments/payment-intents` | Create a payment intent |
+| `POST /api/v1/pos/payments/payment-intents/:id/process` | Process a payment intent |
+| `POST /api/v1/pos/payments/payment-intents/:id/cancel` | Cancel a payment intent |
+| `POST /api/v1/pos/payments/payment-intents/:id/finalize` | Finalize a payment intent |
+| `GET /api/v1/pos/payments/payment-intents/:id` | Read a payment intent |
+
+## Days and shifts
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/pos/shifts/current` | Read the current register shift |
+| `POST /api/v1/pos/shifts/close` | Close the current register shift/day |
+| `POST /api/v1/pos/shifts/cash-drops` | Record a cash drop or cash refund adjustment |
+| `GET /api/v1/pos/shifts/recent` | Read recent register shifts |
+| `GET /api/v1/pos/shifts/monthly-tax` | Read monthly tax report |
+| `GET /api/v1/pos/shifts/:businessDate` | Read closeout data for one business date |
+| `GET /api/v1/pos/days/current` | Read the current POS day when mounted as days |
+| `GET /api/v1/pos/days/recent` | Read recent POS days when mounted as days |
+
+## Webhooks
+
+Stripe POS payment webhooks are received at `/api/v1/webhooks/stripe-pos`. Provider callbacks are handled server-side and should not be called directly by client applications.

@@ -3,16 +3,42 @@ title: "Sales API"
 description: "Use sales endpoints for POS imports, metrics, transactions, and forecasts."
 ---
 
-Sales endpoints support POS imports and reporting workflows.
+Sales endpoints support POS imports, transaction reads, dashboard metrics, item performance, and forecasting.
 
-| Endpoint area | Use it for |
+| Endpoint | Use it for |
 |---|---|
-| `/chefos/api/v1/sales/imports` | Upload or track POS sales imports |
-| `/chefos/api/v1/sales/transactions` | Read imported checks and line-item activity |
-| `/chefos/api/v1/sales/items` | Read menu item performance |
-| `/chefos/api/v1/sales/reports` | Read sales summaries by date, location, category, or item |
-| `/chefos/api/v1/sales/forecasts` | Read forecast outputs when enabled |
+| `POST /api/v1/sales/uploads` | Upload POS sales files for processing |
+| `GET /api/v1/sales/uploads` | List prior uploads |
+| `GET /api/v1/sales/uploads/:id` | Inspect an upload |
+| `DELETE /api/v1/sales/uploads/:id` | Delete an upload when permitted |
+| `GET /api/v1/sales/transactions` | Read checks and line-item activity |
+| `GET /api/v1/sales/summary` | Read sales totals for a date range |
+| `GET /api/v1/sales/trend` | Read revenue trend data |
+| `GET /api/v1/sales/activity` | Read activity timeline data |
+| `GET /api/v1/sales/location-summary` | Compare location performance |
+| `GET /api/v1/sales/hourly-heatmap` | Read heatmap data by day and hour |
+| `GET /api/v1/sales/check-distribution` | Analyze check-size distribution |
+| `GET /api/v1/sales/item-trend` | Track one item's quantity and revenue over time |
+| `GET /api/v1/sales/payment-mix` | Read payment method mix |
+| `GET /api/v1/sales/top-items` | List top-selling items |
+| `GET /api/v1/sales/items` | Search menu items |
+| `GET /api/v1/sales/locations` | List sales locations |
+| `GET /api/v1/sales/insights` | Read generated sales insights |
+| `GET /api/v1/sales/forecast` | Read forecast outputs |
+| `POST /api/v1/sales/forecast/generate` | Generate forecasts when enabled |
+| `POST /api/v1/sales/forecast/retrain` | Queue forecast retraining |
+| `GET /api/v1/sales/forecast/status` | Check forecast job status |
+| `GET /api/v1/sales/forecast/items` | List forecastable items |
 
 ## Required context
 
 Most sales requests are location-scoped. Include `X-Location-Id` unless the endpoint explicitly supports organization-wide reporting.
+
+## Common query parameters
+
+| Parameter | Description |
+|---|---|
+| `startDate`, `endDate` | Reporting date range |
+| `locationId` | Explicit location when supported |
+| `itemId` | Item filter for item-level reporting |
+| `limit`, `page` | List paging controls |

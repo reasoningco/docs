@@ -1,0 +1,31 @@
+---
+title: "Messaging API"
+description: "Create chat tokens, direct messages, channels, video tokens, notifications, and task alerts."
+---
+
+Messaging APIs connect ChefOS users to channels, direct messages, task alerts, calls, and notification preferences.
+
+## Chat
+
+| Endpoint | Use it for |
+|---|---|
+| `POST /api/v1/chat/stream/token` | Create a Stream chat token |
+| `POST /api/v1/chat/stream/dm` | Create or open a direct message |
+| `POST /api/v1/chat/stream/channel` | Create or open a channel |
+| `GET /api/v1/chat/stream/members` | List chat members |
+| `POST /api/v1/chat/stream/bootstrap-defaults` | Create default channels |
+| `POST /api/v1/chat/stream/sync-users` | Sync users to chat provider |
+| `POST /api/v1/chat/stream/task-notification` | Send a task notification |
+| `POST /api/v1/chat/stream/video-token` | Create a video token |
+
+## Notifications
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/notifications/catalog` | Read notification preference catalog |
+| `PUT /api/v1/notifications/preferences/:type` | Update one notification preference |
+| `GET /api/v1/push-notifications/push-tokens` | List push tokens |
+
+## Notes
+
+Messaging requests are organization-scoped unless the action is tied to a specific location or task. Use permission checks before exposing channel administration or broadcast actions.

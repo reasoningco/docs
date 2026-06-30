@@ -17,9 +17,12 @@
             "group": "Start here",
             "pages": [
               "index",
+              "guide/quickstart",
               "guide/what-is-chefos",
               "guide/architecture",
               "guide/auth",
+              "guide/requests",
+              "guide/errors",
               "guide/rbac"
             ]
           }
@@ -29,13 +32,35 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "Core APIs",
+            "group": "Fundamentals",
             "pages": [
               "api/overview",
               "api/auth",
+              "api/routes",
+              "api/locations",
+              "api/reports"
+            ]
+          },
+          {
+            "group": "Core operations",
+            "pages": [
               "api/sales",
+              "api/budgets",
               "api/scheduling",
               "api/inventory",
+              "api/pos"
+            ]
+          },
+          {
+            "group": "Platform APIs",
+            "pages": [
+              "api/integrations",
+              "api/webhooks",
+              "api/messaging",
+              "api/billing",
+              "api/commissary",
+              "api/reservations",
+              "api/mobile-manager",
               "api/employee-mobile"
             ]
           }
@@ -51,7 +76,10 @@
               "apps/inventory",
               "apps/scheduling",
               "apps/sales",
+              "apps/budgets",
+              "apps/pos",
               "apps/messaging",
+              "apps/locations",
               "apps/employee-mobile"
             ]
           }

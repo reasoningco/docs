@@ -1,0 +1,45 @@
+---
+title: "Budgets API"
+description: "Manage sales targets, budgets, wallet activity, categories, alerts, and labor projections."
+---
+
+Budgets are exposed under the sales domain because actuals and targets are tied to revenue and location performance.
+
+## Targets and actuals
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/sales/budgets/targets` | List sales targets |
+| `GET /api/v1/sales/budgets/targets/recalculation-basis` | Read target recalculation inputs |
+| `POST /api/v1/sales/budgets/targets/import/preview` | Preview a target import |
+| `POST /api/v1/sales/budgets/targets/bulk` | Create or update targets in bulk |
+| `DELETE /api/v1/sales/budgets/targets/:id` | Delete a target |
+| `GET /api/v1/sales/budgets/target-vs-actual` | Compare targets to actuals |
+| `GET /api/v1/sales/budgets/target-vs-actual/year` | Compare annual target performance |
+
+## Budgets and wallet
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/sales/budgets` | List budgets |
+| `POST /api/v1/sales/budgets` | Create a budget |
+| `PATCH /api/v1/sales/budgets/:id` | Update a budget |
+| `POST /api/v1/sales/budgets/:id/activate` | Activate a budget |
+| `GET /api/v1/sales/budgets/wallet` | Read wallet status |
+| `GET /api/v1/sales/budgets/alerts` | List budget alerts |
+| `POST /api/v1/sales/budgets/suggest` | Generate budget suggestions |
+| `POST /api/v1/sales/budgets/:id/lock` | Lock a budget period |
+
+## Transactions and categories
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/sales/budgets/:id/transactions` | List budget transactions |
+| `POST /api/v1/sales/budgets/:id/transactions` | Create a budget transaction |
+| `DELETE /api/v1/sales/budgets/:id/transactions/:txId` | Delete a transaction |
+| `GET /api/v1/sales/budgets/:budgetId/transactions/:txId/detail` | Read transaction detail |
+| `GET /api/v1/sales/budgets/categories` | List budget categories |
+| `POST /api/v1/sales/budgets/categories` | Create a category |
+| `PATCH /api/v1/sales/budgets/categories/:categoryId` | Update a category |
+| `DELETE /api/v1/sales/budgets/categories/:categoryId` | Delete a category |
+| `GET /api/v1/sales/budgets/labor-projection` | Read labor projection against sales targets |

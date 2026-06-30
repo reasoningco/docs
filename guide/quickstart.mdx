@@ -1,0 +1,68 @@
+---
+title: "Quickstart"
+description: "Make your first ChefOS API request and confirm location access."
+---
+
+This quickstart verifies that your credentials work, that your token has the expected permissions, and that you are sending location context correctly.
+
+## 1. Choose an environment
+
+ChefOS separates sandbox and production credentials.
+
+| Environment | Use it for |
+|---|---|
+| Sandbox | Development, dry runs, test imports, and partner certification |
+| Production | Live restaurant data and approved workflows |
+
+Use the base URL provided with your credentials. All current API routes are under `/api/v1`.
+
+## 2. Send a health check
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/health"
+```
+
+Successful response:
+
+```json
+{
+  "ok": true
+}
+```
+
+## 3. Inspect your permissions
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/me/permissions" \
+  -H "Authorization: Bearer $CHEFOS_TOKEN"
+```
+
+Use this response to confirm the domains, actions, and locations your token can access.
+
+## 4. List granted locations
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/locations/mine" \
+  -H "Authorization: Bearer $CHEFOS_TOKEN"
+```
+
+Pick a concrete location ID for location-scoped reads and writes.
+
+## 5. Make a scoped request
+
+```bash
+curl "$CHEFOS_API_BASE/api/v1/sales/summary?startDate=2026-06-01&endDate=2026-06-30" \
+  -H "Authorization: Bearer $CHEFOS_TOKEN" \
+  -H "X-Location-Id: $CHEFOS_LOCATION_ID"
+```
+
+## Next steps
+
+<Columns cols={2}>
+  <Card title="Request conventions" icon="braces" href="/guide/requests">
+    Learn headers, filters, pagination, retries, and idempotency.
+  </Card>
+  <Card title="Endpoint index" icon="list-tree" href="/api/routes">
+    Browse route groups across the full ChefOS API surface.
+  </Card>
+</Columns>

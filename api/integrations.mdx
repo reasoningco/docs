@@ -1,0 +1,48 @@
+---
+title: "Integrations API"
+description: "Connect POS, reservations, scheduling, accounting, and provider data to ChefOS."
+---
+
+Integration endpoints manage provider credentials, OAuth flows, location mappings, and sync jobs.
+
+## POS and provider connections
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/integrations` | List configured integrations |
+| `GET /api/v1/integrations/pos/providers` | List supported POS providers |
+| `GET /api/v1/integrations/pos/active` | Read the active POS provider |
+| `PUT /api/v1/integrations/pos/active` | Set the active POS provider |
+| `PUT /api/v1/integrations/toast/credentials` | Save Toast credentials |
+| `POST /api/v1/integrations/:provider/oauth/start` | Start provider OAuth |
+| `GET /api/v1/integrations/:provider/oauth/callback` | Receive OAuth callback |
+| `GET /api/v1/integrations/:provider/status` | Read provider connection status |
+| `GET /api/v1/integrations/:provider/locations` | List provider locations |
+| `PUT /api/v1/integrations/:provider/location-mappings` | Save provider location mappings |
+| `POST /api/v1/integrations/:provider/sync` | Trigger a provider sync |
+| `PUT /api/v1/integrations/:provider` | Upsert provider configuration |
+| `DELETE /api/v1/integrations/:provider` | Disconnect a provider |
+
+## QuickBooks
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/integrations/qbo/connect` | Start QuickBooks connection |
+| `POST /api/v1/integrations/qbo/connect` | Create QuickBooks connection |
+| `GET /api/v1/integrations/qbo/callback` | Receive QuickBooks callback |
+| `GET /api/v1/integrations/qbo/status` | Read connection status |
+| `POST /api/v1/integrations/qbo/disconnect` | Disconnect QuickBooks |
+| `GET /api/v1/integrations/qbo/sync/health` | Read sync health |
+| `POST /api/v1/integrations/qbo/sync/reconcile` | Reconcile QuickBooks sync state |
+| `PATCH /api/v1/integrations/qbo/settings` | Update QuickBooks settings |
+| `POST /api/v1/integrations/qbo/sync/accounts` | Sync accounts |
+| `GET /api/v1/integrations/qbo/vendors` | List mapped vendors |
+| `POST /api/v1/integrations/qbo/vendors/map` | Map a vendor |
+| `POST /api/v1/integrations/qbo/vendors/push/:vendorId` | Push vendor to QuickBooks |
+| `POST /api/v1/integrations/qbo/vendors/sync/:vendorId` | Sync one vendor |
+| `POST /api/v1/integrations/qbo/sync/bill/:invoiceId` | Sync invoice as a bill |
+| `POST /api/v1/integrations/qbo/sync/payments` | Sync payments |
+
+## Provider families
+
+ChefOS integration packages currently include provider logic for POS, reservations, scheduling, voice, and accounting workflows. Example provider families include Toast, Square, Clover, OpenTable, When2Work, Vapi, and QuickBooks.

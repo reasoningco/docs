@@ -1,0 +1,30 @@
+---
+title: "Reports API"
+description: "Run smart reports, custom queries, and scheduled operational summaries."
+---
+
+Reports APIs power ChefOS reporting surfaces and Sous AI scheduled summaries.
+
+## Endpoints
+
+| Endpoint | Use it for |
+|---|---|
+| `POST /api/v1/reports/custom-query` | Run an approved custom query against permitted datasets |
+| `POST /api/v1/reports/smart` | Ask the report planner for a permission-aware report |
+| `GET /api/v1/reports/schedules` | List scheduled reports |
+| `POST /api/v1/reports/schedules` | Create a scheduled report |
+| `PATCH /api/v1/reports/schedules/:id` | Update a scheduled report |
+| `DELETE /api/v1/reports/schedules/:id` | Delete a scheduled report |
+| `POST /api/v1/reports/schedules/test-send` | Send a test scheduled report |
+| `POST /api/v1/reports/schedules/:id/send-now` | Send a scheduled report immediately |
+
+## Domain hints
+
+Smart reports can be routed to dataset families such as sales, scheduling, inventory, budgets, or mixed operational summaries. Include a location and date range whenever the report is operational rather than account-level.
+
+## Scheduling guidance
+
+- Keep recurring reports narrow enough to be useful.
+- Include the intended recipients and cadence.
+- Re-check permissions before editing or sending schedules.
+- Treat report output as scoped to the permissions of the authenticated creator.

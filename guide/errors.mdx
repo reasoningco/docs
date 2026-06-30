@@ -1,0 +1,45 @@
+---
+title: "Errors and retries"
+description: "Handle ChefOS HTTP errors, validation messages, and retryable failures."
+---
+
+ChefOS uses HTTP status codes plus a JSON body when an error can be represented safely.
+
+## Error body
+
+```json
+{
+  "error": "The request is outside the token's location scope.",
+  "code": "location_scope_denied",
+  "details": {
+    "locationId": "loc_123"
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `error` | Human-readable message suitable for logs and operator diagnostics |
+| `message` | Alternate message field used by some product endpoints |
+| `code` | Stable machine-readable code when available |
+| `details` | Optional structured validation, conflict, or scope context |
+
+## Status codes
+
+| Status | Meaning | Client behavior |
+|---|---|---|
+| `400` | Invalid request body, query, or workflow state | Fix the request before retrying |
+| `401` | Missing, expired, or invalid token | Refresh or replace credentials |
+| `403` | Token is valid but lacks permission or location access | Request a narrower or broader grant as needed |
+| `404` | Resource does not exist or is outside accessible scope | Confirm the ID and location |
+| `409` | Conflict with current resource state | Reload and reconcile before writing again |
+| `429` | Rate limit reached | Back off before retrying |
+| `500`-`504` | Server or upstream dependency failure | Retry with backoff if the operation is idempotent |
+
+## Debugging checklist
+
+1. Confirm the base path is `/api/v1`.
+2. Confirm the token is from the same environment as the base URL.
+3. Call `/api/v1/me/permissions`.
+4. Call `/api/v1/locations/mine`.
+5. Repeat the failing request with the smallest body and one concrete `X-Location-Id`.

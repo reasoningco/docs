@@ -1,0 +1,59 @@
+---
+title: "Request conventions"
+description: "Use standard headers, filters, pagination, and retry behavior across ChefOS APIs."
+---
+
+ChefOS APIs use consistent HTTPS request patterns across operational domains.
+
+## Base path
+
+All current routes are mounted under:
+
+```text
+/api/v1
+```
+
+Older `/chefos/api/v1` URLs are redirected for compatibility. New integrations should use `/api/v1`.
+
+## Headers
+
+| Header | Required | Description |
+|---|---|---|
+| `Authorization` | Yes | `Bearer <token>` for the API client or user session |
+| `X-Location-Id` | For location-scoped endpoints | Active location for reads and writes |
+| `Content-Type` | For request bodies | Use `application/json` unless an endpoint explicitly accepts a file upload |
+
+## Location scope
+
+Most operational endpoints are scoped by organization and location. Use `/api/v1/locations/mine` to list locations the token can access.
+
+Some dashboards can use an aggregate location such as `all` when the authenticated user is allowed to view multiple locations. Mutations should target a concrete location ID unless the endpoint documents another behavior.
+
+## Filtering
+
+List and report endpoints commonly accept query parameters such as:
+
+| Parameter | Use |
+|---|---|
+| `startDate`, `endDate` | Date range filters for reports and activity |
+| `from`, `to` | Alternate date range filters on operational feeds |
+| `locationId` | Explicit location override when supported |
+| `status` | Workflow state filters for orders, invoices, requests, and jobs |
+| `limit`, `page` | Page size and page number for list views that paginate |
+
+## Idempotency
+
+Treat create, update, payment, import, and webhook replay operations as retry-sensitive.
+
+- Retry `GET` requests safely.
+- Retry `POST`, `PUT`, `PATCH`, and `DELETE` only when your client can prove the operation is idempotent.
+- Store upstream IDs, upload IDs, transaction IDs, and external references so duplicate imports can be reconciled.
+- Use a stable client-side idempotency key if your assigned endpoint supports one.
+
+## Timeouts and retries
+
+Use short network timeouts for user-facing requests and longer timeouts for import jobs. Retry transient `429`, `500`, `502`, `503`, and `504` responses with exponential backoff. Do not retry validation errors without changing the request.
+
+## Legacy URLs
+
+ChefOS redirects legacy module paths such as `/sales/...` and old `/chefos/api/v1/...` paths to `/api/v1/...`. Keep new code on the canonical path so logs, metrics, and support traces are easier to follow.

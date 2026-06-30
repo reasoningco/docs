@@ -1,0 +1,23 @@
+---
+title: "Billing API"
+description: "Read subscription status, invoices, payment methods, checkout sessions, and billing portal links."
+---
+
+Billing APIs power account billing screens, subscription changes, and hardware checkout flows.
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/billing/status` | Read subscription and billing status |
+| `GET /api/v1/billing/invoices` | List invoices |
+| `GET /api/v1/billing/payment-methods` | List payment methods |
+| `POST /api/v1/billing/checkout` | Create a subscription checkout session |
+| `POST /api/v1/billing/hardware-checkout` | Create a hardware checkout session |
+| `POST /api/v1/billing/portal` | Create a billing portal link |
+| `POST /api/v1/billing/update-plan` | Update subscription plan |
+| `POST /api/v1/billing/cancel` | Cancel subscription |
+| `POST /api/v1/billing/reactivate` | Reactivate subscription |
+| `POST /api/v1/billing/webhook` | Receive billing provider webhook |
+
+## Notes
+
+Billing endpoints are account-level and may not require `X-Location-Id`. Payment and portal operations should be started from trusted clients and should display clear confirmation to operators before changing live subscriptions.

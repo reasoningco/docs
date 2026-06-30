@@ -1,0 +1,31 @@
+---
+title: "Commissary API"
+description: "Manage commissary settings, satellite locations, catalog sync, and commissary orders."
+---
+
+Commissary APIs support central production kitchens and satellite locations that order from them.
+
+## Settings and catalog
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/commissary/settings` | Read commissary configuration |
+| `POST /api/v1/commissary/settings/enable` | Enable commissary mode |
+| `POST /api/v1/commissary/settings/satellites` | Add a satellite location |
+| `DELETE /api/v1/commissary/settings/satellites/:satelliteId` | Remove a satellite location |
+| `POST /api/v1/commissary/sync-vendors` | Sync commissary vendors |
+| `GET /api/v1/commissary/catalog` | Read commissary catalog |
+
+## Orders
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/commissary/orders` | List commissary orders |
+| `GET /api/v1/commissary/orders/:id` | Read one order |
+| `POST /api/v1/commissary/orders` | Create an order |
+| `POST /api/v1/commissary/orders/:id/cancel` | Cancel an order |
+| `POST /api/v1/commissary/orders/:id/confirm` | Confirm an order |
+| `POST /api/v1/commissary/orders/:id/start-production` | Start production |
+| `POST /api/v1/commissary/orders/:id/mark-ready` | Mark ready |
+| `POST /api/v1/commissary/orders/:id/dispatch` | Dispatch order |
+| `POST /api/v1/commissary/orders/:id/receive` | Receive order |

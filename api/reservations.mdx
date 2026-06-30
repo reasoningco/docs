@@ -1,0 +1,21 @@
+---
+title: "Reservations API"
+description: "Read reservations, upcoming events, provider status, and reservation sync configuration."
+---
+
+Reservation APIs connect external reservation systems to ChefOS sales and operations views.
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/reservations` | List reservations |
+| `GET /api/v1/reservations/upcoming` | List upcoming reservations and events |
+| `GET /api/v1/reservations/:id` | Read reservation details |
+| `GET /api/v1/reservations/stats/overview` | Read reservations summary stats |
+| `GET /api/v1/reservations/providers` | List supported providers |
+| `GET /api/v1/reservations/config/active` | Read active provider configuration |
+| `PUT /api/v1/reservations/config/credentials` | Save provider credentials |
+| `POST /api/v1/reservations/sync` | Trigger reservations sync |
+
+## Notes
+
+Reservation data is usually location-scoped. Use the same location mapping strategy as POS integrations so sales, reservations, and forecasts align.

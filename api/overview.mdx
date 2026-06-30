@@ -3,11 +3,19 @@ title: "API overview"
 description: "Review base URLs, headers, response patterns, and API domains."
 ---
 
-ChefOS APIs are organized by operational domain. Every request is authenticated and evaluated against the token permissions and location scope.
+ChefOS APIs are organized by operational domain. Every protected request is authenticated and evaluated against token permissions and location scope.
 
 ## Base URL
 
 Use the API base URL provided with your credentials. Sandbox and production use separate credentials.
+
+All current routes are mounted under:
+
+```text
+/api/v1
+```
+
+Older `/chefos/api/v1` URLs redirect to `/api/v1`. New integrations should use the canonical path.
 
 ## Required headers
 
@@ -21,13 +29,22 @@ Use the API base URL provided with your credentials. Sandbox and production use 
 
 | Domain | Prefix |
 |---|---|
-| Auth and account context | `/chefos/api/v1/auth`, `/chefos/api/v1/me` |
-| Sales | `/chefos/api/v1/sales` |
-| Scheduling | `/chefos/api/v1/scheduling` |
-| Inventory | `/chefos/api/v1/inventory` |
-| Messaging | `/chefos/api/v1/chat` |
-| Employee self-service | `/chefos/api/v1/employee-self-service` |
-| Assistant | `/chefos/api/v1/sous` |
+| Auth and account context | `/api/v1/auth`, `/api/v1/me`, `/api/v1/profile` |
+| Locations and assets | `/api/v1/locations`, `/api/v1/stations` |
+| Sales analytics | `/api/v1/sales` |
+| Budgets | `/api/v1/sales/budgets` |
+| Scheduling | `/api/v1/scheduling`, `/api/v1/open-shifts` |
+| Inventory, recipes, and purchasing | `/api/v1/inventory` |
+| POS and payments | `/api/v1/pos`, `/api/v1/pos/payments`, `/api/v1/pos/shifts` |
+| Integrations | `/api/v1/integrations`, `/api/v1/integrations/qbo` |
+| Webhooks | `/api/v1/webhooks` |
+| Reports | `/api/v1/reports` |
+| Messaging | `/api/v1/chat`, `/api/v1/notifications`, `/api/v1/push-notifications` |
+| Employee and mobile | `/api/v1/employee-self-service`, `/api/v1/mobile/manager` |
+| Assistant | `/api/v1/sous`, `/api/v1/voice-agent` |
+| Billing | `/api/v1/billing` |
+| Commissary | `/api/v1/commissary` |
+| Reservations | `/api/v1/reservations` |
 
 ## Error format
 
@@ -36,3 +53,12 @@ Use the API base URL provided with your credentials. Sandbox and production use 
 | `error` | Human-readable message |
 | `code` | Stable machine-readable code when available |
 | `details` | Optional structured validation or conflict details |
+
+## Public health routes
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /health` | Root service health check |
+| `GET /ready` | Root readiness check with database and Redis status |
+| `GET /api/v1/health` | Versioned API health check |
+| `GET /api/v1/ready` | Versioned API readiness check |

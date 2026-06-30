@@ -3,15 +3,35 @@ title: "Auth API"
 description: "Resolve account context and inspect the current authenticated user."
 ---
 
-Use auth endpoints to resolve login context and confirm what the current token can access.
+Use auth and account endpoints to resolve login context, refresh sessions, inspect permissions, and manage profile settings.
 
 | Endpoint | Purpose |
 |---|---|
-| `GET /chefos/api/v1/me` | Return the current user, organization memberships, locations, and permissions |
-| `GET /chefos/api/v1/auth/resolve-username` | Resolve a username to its login identity when enabled for the organization |
+| `POST /api/v1/auth/sign-in` | Sign in with approved credentials |
+| `POST /api/v1/auth/refresh` | Refresh an authenticated session |
+| `POST /api/v1/auth/sign-out` | End the current session |
+| `POST /api/v1/auth/reset-password` | Start password reset |
+| `POST /api/v1/auth/resolve-username` | Resolve a username when enabled for the organization |
+| `GET /api/v1/auth/organizations` | List organizations available during login |
+| `GET /api/v1/auth/mfa-policy` | Read MFA policy for the current user |
+| `GET /api/v1/auth/2fa/status` | Read enrolled factors |
+| `POST /api/v1/auth/2fa/enroll` | Begin factor enrollment |
+| `POST /api/v1/auth/2fa/challenge` | Start an MFA challenge |
+| `POST /api/v1/auth/2fa/verify` | Verify an MFA challenge |
+| `DELETE /api/v1/auth/2fa/unenroll/:factorId` | Remove an enrolled factor |
+| `GET /api/v1/me/permissions` | Return current permissions, organization context, and location grants |
+| `GET /api/v1/me/preferences/widgets` | Read dashboard widget preferences |
+| `PUT /api/v1/me/preferences/widgets` | Update dashboard widget preferences |
+| `GET /api/v1/me/preferences/appearance` | Read appearance preferences |
+| `PUT /api/v1/me/preferences/appearance` | Update appearance preferences |
+| `GET /api/v1/profile` | Read the current profile |
+| `PATCH /api/v1/profile` | Update the current profile |
+| `PATCH /api/v1/profile/password` | Update password |
+| `POST /api/v1/profile/avatar` | Upload avatar |
 
 ## Integration notes
 
-- Call `/me` after authentication to confirm the token is valid.
+- Call `/api/v1/me/permissions` after authentication to confirm the token is valid.
 - Cache permission and location data for short periods only.
 - Re-check permissions after receiving `401` or `403` responses.
+- Keep login/session endpoints in trusted clients only. Server-to-server integrations should use issued API credentials.

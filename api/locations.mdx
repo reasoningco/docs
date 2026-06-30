@@ -1,0 +1,66 @@
+---
+title: "Locations and assets API"
+description: "Manage location hierarchy, station records, equipment assets, work orders, inspections, and devices."
+---
+
+Use location APIs to discover the restaurant structure a token can access and to manage operational assets tied to those locations.
+
+## Location scope
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/locations` | List locations in scope |
+| `GET /api/v1/locations/mine` | List locations granted to the current token |
+| `POST /api/v1/locations` | Create a location |
+| `PATCH /api/v1/locations/:id` | Update location details |
+| `DELETE /api/v1/locations/:id` | Delete a location when permitted |
+| `PATCH /api/v1/locations/:id/type` | Update location type |
+| `PATCH /api/v1/locations/:id/parent` | Move a location in the hierarchy |
+| `POST /api/v1/locations/canvas-order` | Save visual ordering for the location canvas |
+| `PATCH /api/v1/locations/:id/coordinates` | Save location coordinates |
+| `POST /api/v1/locations/:id/geocode` | Geocode a location |
+| `GET /api/v1/locations/stats` | Read location KPI summary |
+
+## Assets and maintenance
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/locations/assets` | List assets across accessible locations |
+| `GET /api/v1/locations/:id/assets` | List assets for one location |
+| `POST /api/v1/locations/:id/assets` | Create an asset |
+| `POST /api/v1/locations/:id/assets/bulk` | Bulk import assets |
+| `PATCH /api/v1/locations/assets/:assetId` | Update an asset |
+| `POST /api/v1/locations/assets/:assetId/move` | Move an asset |
+| `DELETE /api/v1/locations/assets/:assetId` | Delete an asset |
+| `GET /api/v1/locations/assets/:assetId/maintenance` | List maintenance plans |
+| `POST /api/v1/locations/assets/:assetId/maintenance` | Create a maintenance plan |
+| `PATCH /api/v1/locations/maintenance/:planId` | Update a maintenance plan |
+| `DELETE /api/v1/locations/maintenance/:planId` | Delete a maintenance plan |
+
+## Work orders, inspections, and devices
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/locations/workorders` | List work orders |
+| `GET /api/v1/locations/assets/:assetId/workorders` | List work orders for an asset |
+| `POST /api/v1/locations/assets/:assetId/workorders` | Create a work order |
+| `PATCH /api/v1/locations/workorders/:orderId` | Update a work order |
+| `DELETE /api/v1/locations/workorders/:orderId` | Delete a work order |
+| `GET /api/v1/locations/assets/:assetId/inspections` | List inspection logs |
+| `POST /api/v1/locations/assets/:assetId/inspections` | Create an inspection log |
+| `GET /api/v1/locations/assets/:assetId/devices` | List connected devices |
+| `POST /api/v1/locations/assets/:assetId/devices` | Register a device |
+| `PATCH /api/v1/locations/devices/:deviceId` | Update a device |
+| `POST /api/v1/locations/devices/:deviceId/rotate-secret` | Rotate device webhook secret |
+| `GET /api/v1/locations/devices/:deviceId/readings` | Read device telemetry |
+| `POST /api/v1/locations/webhooks/devices/:deviceId` | Receive device webhook readings |
+
+## Stations
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/stations` | List stations |
+| `GET /api/v1/stations/:id` | Read a station |
+| `POST /api/v1/stations` | Create a station |
+| `PATCH /api/v1/stations/:id` | Update a station |
+| `DELETE /api/v1/stations/:id` | Delete a station |

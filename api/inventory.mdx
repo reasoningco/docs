@@ -3,16 +3,109 @@ title: "Inventory API"
 description: "Use inventory endpoints for items, counts, recipes, ordering, waste, and vendors."
 ---
 
-Inventory endpoints support operational workflows around purchasing, counting, recipe costing, and waste tracking.
+Inventory endpoints support operational workflows around items, vendors, purchasing, invoices, counts, recipes, menus, nutrition, line checks, HACCP, waste, and reporting.
 
-| Endpoint area | Use it for |
+## Core inventory
+
+| Endpoint | Use it for |
 |---|---|
-| `/chefos/api/v1/inventory/items` | Read or manage inventory items |
-| `/chefos/api/v1/inventory/vendors` | Read or manage vendors and vendor item mappings |
-| `/chefos/api/v1/inventory/counts` | Read or manage inventory counts |
-| `/chefos/api/v1/inventory/recipes` | Read recipes, ingredients, yields, and costs |
-| `/chefos/api/v1/inventory/orders` | Read or manage purchase orders |
-| `/chefos/api/v1/inventory/waste` | Read or create waste records |
+| `GET /api/v1/inventory/dashboard` | Read inventory dashboard summary |
+| `GET /api/v1/inventory/items` | Search stock items |
+| `POST /api/v1/inventory/items` | Create stock items |
+| `GET /api/v1/inventory/items/:id` | Read one stock item |
+| `PATCH /api/v1/inventory/items/:id` | Update stock item fields |
+| `GET /api/v1/inventory/items/:id/details` | Read detail view data |
+| `GET /api/v1/inventory/master-items/search` | Search master catalog items |
+| `POST /api/v1/inventory/items/import/preview` | Preview an item import |
+| `POST /api/v1/inventory/items/import` | Commit an item import |
+| `GET /api/v1/inventory/import-history` | List import jobs |
+| `GET /api/v1/inventory/categories` | List categories |
+| `POST /api/v1/inventory/categories` | Create a category |
+| `PATCH /api/v1/inventory/categories/:id` | Update a category |
+| `GET /api/v1/inventory/storage-locations` | List storage locations |
+| `POST /api/v1/inventory/storage-locations` | Create a storage location |
+| `GET /api/v1/inventory/unit-conversions` | List unit conversions |
+| `POST /api/v1/inventory/unit-conversions` | Create a unit conversion |
+| `GET /api/v1/inventory/uom-settings` | Read unit-of-measure settings |
+| `PUT /api/v1/inventory/uom-settings` | Update unit-of-measure settings |
+
+## Vendors, purchasing, and AP
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/vendors` | List vendors |
+| `POST /api/v1/inventory/vendors` | Create a vendor |
+| `GET /api/v1/inventory/vendors/:id` | Read vendor details |
+| `PATCH /api/v1/inventory/vendors/:id` | Update a vendor |
+| `DELETE /api/v1/inventory/vendors/:id` | Delete a vendor |
+| `POST /api/v1/inventory/vendor-items` | Map vendor items |
+| `DELETE /api/v1/inventory/vendor-items` | Remove vendor item mappings |
+| `GET /api/v1/inventory/purchase-orders` | List purchase orders |
+| `POST /api/v1/inventory/purchase-orders` | Create a purchase order |
+| `GET /api/v1/inventory/purchase-orders/:id` | Read purchase order details |
+| `PATCH /api/v1/inventory/purchase-orders/:id` | Update a purchase order |
+| `PATCH /api/v1/inventory/purchase-orders/:id/status` | Change purchase order status |
+| `POST /api/v1/inventory/purchase-orders/:id/receive` | Receive a purchase order |
+| `GET /api/v1/inventory/purchase-orders/:id/invoice` | Read attached invoice |
+| `PUT /api/v1/inventory/purchase-orders/:id/invoice` | Attach or replace invoice |
+| `GET /api/v1/inventory/invoices` | List AP invoices |
+| `POST /api/v1/inventory/invoices` | Create an AP invoice |
+| `PATCH /api/v1/inventory/invoices/:invoiceId/approval` | Approve or reject an invoice |
+| `GET /api/v1/inventory/reports/ap-aging` | Read AP aging report |
+| `GET /api/v1/inventory/reports/vendor-1099` | Read vendor 1099 report |
+| `GET /api/v1/inventory/gl-accounts` | List GL accounts |
+
+## Counts, waste, and transfers
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/counts` | List inventory counts |
+| `POST /api/v1/inventory/counts` | Create a count |
+| `GET /api/v1/inventory/counts/:id` | Read one count |
+| `PATCH /api/v1/inventory/counts/:id/lines` | Update count lines |
+| `POST /api/v1/inventory/counts/:id/complete` | Complete a count |
+| `GET /api/v1/inventory/counts/variance` | Read count variance |
+| `GET /api/v1/inventory/waste` | List waste records |
+| `POST /api/v1/inventory/waste` | Create a waste record |
+| `PATCH /api/v1/inventory/waste/:id` | Update a waste record |
+| `DELETE /api/v1/inventory/waste/:id` | Delete a waste record |
+| `GET /api/v1/inventory/transfers` | List transfers |
+| `POST /api/v1/inventory/transfers` | Create a transfer |
+
+## Recipes, menus, and food safety
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/recipes` | List recipes |
+| `POST /api/v1/inventory/recipes` | Create a recipe |
+| `GET /api/v1/inventory/recipes/:id` | Read recipe details |
+| `PUT /api/v1/inventory/recipes/:id` | Update a recipe |
+| `DELETE /api/v1/inventory/recipes/:id` | Delete a recipe |
+| `POST /api/v1/inventory/recipes/import` | Import recipe data |
+| `POST /api/v1/inventory/recipe-scans` | Submit recipe scan |
+| `GET /api/v1/inventory/recipe-scans` | List recipe scans |
+| `POST /api/v1/inventory/recipes/:id/ingredients` | Add an ingredient |
+| `PUT /api/v1/inventory/recipes/:id/ingredients/:ingredientId` | Update an ingredient |
+| `GET /api/v1/inventory/recipes/:id/cost-snapshots` | Read cost snapshots |
+| `POST /api/v1/inventory/recipes/:id/publish` | Publish a recipe |
+| `GET /api/v1/inventory/cycle-menus` | List cycle menus |
+| `POST /api/v1/inventory/cycle-menus` | Create a cycle menu |
+| `GET /api/v1/inventory/menu-categories` | List menu categories |
+| `GET /api/v1/inventory/line-check-templates` | List line-check templates |
+| `POST /api/v1/inventory/line-check-runs` | Start a line-check run |
+| `GET /api/v1/inventory/line-check-analytics` | Read line-check analytics |
+| `POST /api/v1/inventory/haccp-runs` | Start a HACCP run |
+| `GET /api/v1/inventory/reports/haccp-compliance` | Read HACCP compliance report |
+
+## Vendor quotes
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/inventory/quote-requests` | List quote requests |
+| `POST /api/v1/inventory/quote-requests` | Create a quote request |
+| `POST /api/v1/inventory/quote-requests/:id/send` | Send quote request to vendors |
+| `POST /api/v1/inventory/quote-requests/:id/award` | Award a quote |
+| `GET /api/v1/inventory/quote-requests/:id/comparison` | Compare responses |
 
 ## Required context
 

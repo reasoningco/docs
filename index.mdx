@@ -3,7 +3,7 @@ title: "Start here"
 description: "Use ChefOS APIs to build integrations for restaurant operations."
 ---
 
-ChefOS gives partners a single API surface for restaurant operations: locations, employees, schedules, sales, inventory, messaging, and assistant workflows.
+ChefOS gives partners a single API surface for restaurant operations: locations, employees, schedules, sales, budgets, inventory, POS, messaging, payments, reports, and assistant workflows.
 
 Use these docs when you need to connect another system to ChefOS, automate an operational workflow, or build a service on top of ChefOS data.
 
@@ -11,32 +11,36 @@ Use these docs when you need to connect another system to ChefOS, automate an op
   <Card title="Understand the platform" icon="book-open" href="/guide/what-is-chefos">
     Learn the main ChefOS objects and how data is scoped across restaurants and locations.
   </Card>
-  <Card title="Authenticate requests" icon="key" href="/guide/auth">
-    Send bearer tokens, choose the right environment, and pass location context.
+  <Card title="Run the quickstart" icon="rocket" href="/guide/quickstart">
+    Verify credentials, inspect permissions, and make your first scoped request.
   </Card>
   <Card title="Browse API domains" icon="terminal" href="/api/overview">
-    Find the sales, scheduling, inventory, messaging, and employee self-service endpoints.
+    Find the sales, scheduling, inventory, POS, integrations, webhooks, and employee endpoints.
   </Card>
-  <Card title="Plan an integration" icon="plug" href="/apps/overview">
-    Match common integration use cases to the ChefOS APIs that support them.
+  <Card title="View all route groups" icon="list-tree" href="/api/routes">
+    Scan the current developer-facing route surface by domain.
   </Card>
 </Columns>
 
 ## Quick start
 
 1. Request API credentials for the organization you are integrating with.
-2. Pick the target environment and base URL.
-3. Send `Authorization: Bearer <token>` on every API request.
-4. Include the active location header when reading or writing location-scoped data.
-5. Start with a read-only endpoint, then request write scopes when the workflow is ready.
+2. Pick the sandbox or production base URL.
+3. Send `Authorization: Bearer <token>` on every protected request.
+4. Call `/api/v1/me/permissions` and `/api/v1/locations/mine`.
+5. Include `X-Location-Id` when reading or writing location-scoped data.
+6. Start with read-only scopes, then request write scopes when the workflow is ready.
 
 ## Core domains
 
 | Domain | Build with it when you need to |
 |---|---|
 | Sales | Import POS data, read revenue metrics, compare performance, or power reporting |
+| Budgets | Track sales targets, wallet usage, budget categories, alerts, and labor projections |
 | Scheduling | Sync shifts, employees, availability, time-off, and labor forecasts |
-| Inventory | Manage items, counts, recipes, ordering, waste, and vendor workflows |
+| Inventory | Manage items, counts, recipes, ordering, invoices, waste, and vendor workflows |
+| POS | Register checkout, catalog reads, shift/day closeout, refunds, and payments |
+| Integrations | Connect providers such as Toast, Square, Clover, OpenTable, When2Work, and QuickBooks |
 | Messaging | Connect operational conversations and employee notifications |
 | Employee self-service | Build mobile or kiosk experiences for schedules, trades, and time off |
 | Sous AI | Trigger permission-aware assistant actions from approved workflows |

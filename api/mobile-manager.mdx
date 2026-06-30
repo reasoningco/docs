@@ -1,0 +1,20 @@
+---
+title: "Mobile manager API"
+description: "Read manager mobile summaries, completed work, sales item activity, settings, audits, and inventory exports."
+---
+
+Mobile manager endpoints are optimized for concise operational views on manager devices.
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/mobile/manager/home-summary` | Read the manager home summary |
+| `GET /api/v1/mobile/manager/done-feed` | Read recently completed tasks and work |
+| `GET /api/v1/mobile/manager/sales-item-activity` | Read sales item activity |
+| `GET /api/v1/mobile/manager/settings` | Read manager mobile settings |
+| `PUT /api/v1/mobile/manager/settings` | Update manager mobile settings |
+| `GET /api/v1/mobile/manager/audit-log` | Read audit activity |
+| `GET /api/v1/mobile/manager/inventory-export` | Export inventory data for mobile use |
+
+## Required context
+
+Manager mobile data is permission-aware and typically location-scoped. Include `X-Location-Id` for operational location views.

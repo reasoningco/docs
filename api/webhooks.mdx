@@ -1,0 +1,29 @@
+---
+title: "Webhooks API"
+description: "Receive provider events and inspect webhook processing history."
+---
+
+Webhook routes handle inbound provider events and allow approved clients to inspect event history.
+
+## Endpoints
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/webhooks/events` | List received webhook events |
+| `POST /api/v1/webhooks/:provider` | Receive or replay a provider event |
+| `POST /api/v1/webhooks/:provider/:connectionId` | Receive a provider event for one connection |
+| `POST /api/v1/webhooks/vapi` | Receive Vapi voice-agent callbacks |
+| `POST /api/v1/webhooks/postmark` | Receive Postmark inbound events |
+| `POST /api/v1/webhooks/resend` | Receive Resend inbound events |
+| `POST /api/v1/webhooks/stripe-pos` | Receive Stripe POS payment events |
+
+## Delivery behavior
+
+- Validate provider signatures where the provider supports them.
+- Store provider event IDs and connection IDs for replay protection.
+- Respond quickly, then process long-running work asynchronously.
+- Retry only when the provider documents retry-safe delivery.
+
+## Security
+
+Webhook endpoints that are public still verify provider-specific secrets, signatures, connection IDs, or tokens inside the handler. Do not expose these URLs in client-side code unless the route is explicitly designed for public provider callbacks.

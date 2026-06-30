@@ -3,16 +3,41 @@ title: "Scheduling API"
 description: "Use scheduling endpoints for employees, shifts, time off, availability, and labor workflows."
 ---
 
-Scheduling endpoints support employee roster sync, schedule publishing, time-off workflows, and labor reporting.
+Scheduling endpoints support employee roster sync, schedule publishing, templates, time off, availability, meals, manager tasks, and labor reporting.
 
-| Endpoint area | Use it for |
+| Endpoint | Use it for |
 |---|---|
-| `/chefos/api/v1/scheduling/employees` | Read or manage employee roster records |
-| `/chefos/api/v1/scheduling/positions` | Read or manage schedulable positions |
-| `/chefos/api/v1/scheduling/shifts` | Read, create, or update shifts |
-| `/chefos/api/v1/scheduling/time-off` | Read or manage time-off requests |
-| `/chefos/api/v1/scheduling/availability` | Read or manage employee availability |
-| `/chefos/api/v1/scheduling/reports` | Read labor summaries and schedule metrics |
+| `GET /api/v1/scheduling/me` | Resolve the current employee and schedule context |
+| `GET /api/v1/scheduling/positions` | List schedulable positions |
+| `GET /api/v1/scheduling/categories` | List schedule categories |
+| `GET /api/v1/scheduling/categories/all` | List all categories for management views |
+| `GET /api/v1/scheduling/templates` | List schedule templates |
+| `GET /api/v1/scheduling/employees/deleted` | Read recently deleted employees |
+| `GET /api/v1/scheduling/employee-positions` | Read employee-position assignments |
+| `GET /api/v1/scheduling/employee-notifications` | Read employee notification settings |
+| `GET /api/v1/scheduling/alert-dates` | Read schedule alert dates |
+| `GET /api/v1/scheduling/time-off/settings` | Read time-off rules |
+| `GET /api/v1/scheduling/tradeboard-permissions` | Read shift-trade permission settings |
+| `GET /api/v1/scheduling/manager-task-options/line-check-templates` | List line-check templates available to manager tasks |
+| `GET /api/v1/scheduling/manager-task-options/inventory-counts` | List inventory counts available to manager tasks |
+| `GET /api/v1/scheduling/penalties/reasons` | List points/penalty reasons |
+| `GET /api/v1/employee-availability/availability` | Read employee availability |
+| `GET /api/v1/employee-calendar/connections` | Read employee calendar connections |
+| `/api/v1/open-shifts` | Manage open-shift workflows when enabled |
+| `/api/v1/scheduling/migration` | Run migration/import helpers when enabled |
+
+## Meals
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/scheduling/meal-config` | Read meal benefit configuration |
+| `PUT /api/v1/scheduling/meal-config` | Update meal benefit configuration |
+| `POST /api/v1/scheduling/meal-credits` | Grant meal credits |
+| `GET /api/v1/scheduling/meal-credits` | List meal credits |
+| `GET /api/v1/scheduling/meal-employees` | List employees eligible for meals |
+| `GET /api/v1/scheduling/my/meal-credits` | Read current employee meal credits |
+| `GET /api/v1/scheduling/my/meal-history` | Read current employee meal history |
+| `POST /api/v1/scheduling/meal-verify` | Verify a meal redemption |
 
 ## Required context
 

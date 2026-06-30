@@ -3,16 +3,33 @@ title: "Employee self-service API"
 description: "Use employee-facing endpoints for schedules, time off, shift trades, and notifications."
 ---
 
-Employee self-service endpoints are designed for experiences where the authenticated employee can see or manage their own schedule-related data.
+Employee self-service endpoints are designed for experiences where the authenticated employee can see or manage their own schedule-related data. Manager mobile endpoints expose a compact operational feed for approved manager experiences.
 
-| Endpoint area | Use it for |
+## Employee self-service
+
+| Endpoint | Use it for |
 |---|---|
-| `/chefos/api/v1/scheduling/me` | Resolve the current employee profile |
-| `/chefos/api/v1/employee-self-service/upcoming-shifts` | Read upcoming shifts for the current employee |
-| `/chefos/api/v1/employee-self-service/time-off` | Create and read time-off requests |
-| `/chefos/api/v1/employee-self-service/shift-trades` | Create and read shift trade or drop requests |
-| `/chefos/api/v1/employee-self-service/open-shifts` | Read and claim open shifts |
-| `/chefos/api/v1/employee-self-service/notifications` | Register devices and manage notification preferences |
+| `GET /api/v1/scheduling/me` | Resolve the current employee profile |
+| `GET /api/v1/employee-self-service/my-notifications` | Read employee notifications |
+| `POST /api/v1/employee-self-service/uploads/line-check-photo` | Upload a line-check response photo |
+| `GET /api/v1/employee-availability/availability` | Read current availability |
+| `GET /api/v1/employee-calendar/connections` | Read connected calendars |
+| `/api/v1/open-shifts` | Read and claim open shifts when enabled |
+| `GET /api/v1/push-notifications/push-tokens` | List registered push tokens |
+| `GET /api/v1/notifications/catalog` | Read notification preference catalog |
+| `PUT /api/v1/notifications/preferences/:type` | Update notification preference |
+
+## Manager mobile
+
+| Endpoint | Use it for |
+|---|---|
+| `GET /api/v1/mobile/manager/home-summary` | Read manager home summary |
+| `GET /api/v1/mobile/manager/done-feed` | Read recently completed work |
+| `GET /api/v1/mobile/manager/sales-item-activity` | Read item activity for sales follow-up |
+| `GET /api/v1/mobile/manager/settings` | Read mobile manager settings |
+| `PUT /api/v1/mobile/manager/settings` | Update mobile manager settings |
+| `GET /api/v1/mobile/manager/audit-log` | Read manager audit log |
+| `GET /api/v1/mobile/manager/inventory-export` | Export inventory data for mobile workflows |
 
 ## Required context
 
