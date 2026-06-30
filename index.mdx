@@ -11,8 +11,8 @@ Use these docs when you need to connect another system to ChefOS, automate an op
   <Card title="Understand the platform" icon="book-open" href="/guide/what-is-chefos">
     Learn the main ChefOS objects and how data is scoped across restaurants and locations.
   </Card>
-  <Card title="Get API access" icon="key-round" href="/guide/api-access">
-    Learn how ChefOS API access is provisioned and what credentials you need.
+  <Card title="Developer Access" icon="key-round" href="/guide/api-access">
+    Learn how organization admins create scoped API tokens and what credentials you need.
   </Card>
   <Card title="Run the quickstart" icon="rocket" href="/guide/quickstart">
     Verify credentials, inspect permissions, and make your first scoped request.
@@ -24,10 +24,10 @@ Use these docs when you need to connect another system to ChefOS, automate an op
 
 ## Quick start
 
-1. Request API credentials for the organization you are integrating with.
+1. Ask an organization admin to create a scoped API token in ChefOS Developer Access.
 2. Pick the sandbox or production base URL.
 3. Send `Authorization: Bearer <token>` on every protected request.
-4. Call `/api/v1/me/permissions` and `/api/v1/locations/mine`.
+4. Call `/api/v1/locations/mine` to confirm location access.
 5. Include `X-Location-Id` when reading or writing location-scoped data.
 6. Start with read-only scopes, then request write scopes when the workflow is ready.
 

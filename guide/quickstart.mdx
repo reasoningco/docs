@@ -3,7 +3,7 @@ title: "Quickstart"
 description: "Make your first ChefOS API request and confirm location access."
 ---
 
-This quickstart verifies that your credentials work, that your token has the expected permissions, and that you are sending location context correctly.
+This quickstart verifies that your API token works, that it can see the expected locations, and that you are sending location context correctly.
 
 ## 1. Choose an environment
 
@@ -30,25 +30,16 @@ Successful response:
 }
 ```
 
-## 3. Inspect your permissions
-
-```bash
-curl "$CHEFOS_API_BASE/api/v1/me/permissions" \
-  -H "Authorization: Bearer $CHEFOS_TOKEN"
-```
-
-Use this response to confirm the domains, actions, and locations your token can access.
-
-## 4. List granted locations
+## 3. List granted locations
 
 ```bash
 curl "$CHEFOS_API_BASE/api/v1/locations/mine" \
   -H "Authorization: Bearer $CHEFOS_TOKEN"
 ```
 
-Pick a concrete location ID for location-scoped reads and writes.
+Use this response to confirm the locations your token can access. Pick a concrete location ID for location-scoped reads and writes.
 
-## 5. Make a scoped request
+## 4. Make a scoped request
 
 ```bash
 curl "$CHEFOS_API_BASE/api/v1/sales/summary?startDate=2026-06-01&endDate=2026-06-30" \

@@ -40,6 +40,6 @@ ChefOS uses HTTP status codes plus a JSON body when an error can be represented 
 
 1. Confirm the base path is `/api/v1`.
 2. Confirm the token is from the same environment as the base URL.
-3. Call `/api/v1/me/permissions`.
-4. Call `/api/v1/locations/mine`.
+3. Call `/api/v1/locations/mine`.
+4. For signed-in user sessions, call `/api/v1/me/permissions`.
 5. Repeat the failing request with the smallest body and one concrete `X-Location-Id`.

@@ -3,33 +3,53 @@ title: "Permissions and scopes"
 description: "Understand how ChefOS limits API access by domain, action, and location."
 ---
 
-ChefOS permissions are intentionally narrow. A token can be limited to read-only access, specific domains, specific actions, or specific locations.
+ChefOS permissions are intentionally narrow. Organization admins select scopes and location grants when they create a token in Developer Access. A token can be limited to read-only access, specific domains, specific actions, or specific locations.
 
-## Permission shape
+## Scope shape
 
-Permissions generally follow this shape:
+Scopes generally follow this shape:
 
 `domain.resource.action`
 
 | Example | Allows |
 |---|---|
-| `sales.reports.read` | Read sales reports and summaries |
+| `sales.analytics.read` | Read sales reports and summaries |
 | `scheduling.shifts.write` | Create or update shifts |
 | `inventory.items.read` | Read inventory item records |
-| `messaging.channels.write` | Create or update messaging channels |
+| `chat.channels.write` | Create or update messaging channels |
+
+## Developer Access scope catalog
+
+The Developer Access UI shows the supported public API scopes. Common scopes include:
+
+| Domain | Scopes |
+|---|---|
+| Core | `locations.mine.read` |
+| Sales | `sales.analytics.read`, `sales.items.read`, `sales.locations.read`, `sales.transactions.read`, `sales.transactions.create`, `sales.transactions.refund`, `sales.uploads.read`, `sales.uploads.write` |
+| Inventory | `inventory.items.read`, `inventory.items.write`, `inventory.counts.read`, `inventory.counts.write`, `inventory.purchase_orders.read`, `inventory.purchase_orders.write`, `inventory.receipts.read`, `inventory.receipts.write`, `inventory.invoices.read`, `inventory.invoices.write`, `inventory.recipes.read`, `inventory.recipes.write`, `inventory.transfers.read`, `inventory.transfers.write`, `inventory.vendors.read`, `inventory.vendors.write`, `inventory.waste.read`, `inventory.waste.write`, `inventory.haccp.read`, `inventory.haccp.record`, `inventory.haccp.approve`, `inventory.line_checks.read`, `inventory.line_checks.write`, `inventory.locations.read`, `inventory.locations.update`, `inventory.settings.read`, `inventory.settings.write` |
+| Scheduling | `scheduling.employees.read`, `scheduling.employees.write`, `scheduling.shifts.read`, `scheduling.shifts.write`, `scheduling.time_off.read`, `scheduling.time_off.write`, `scheduling.trades.read`, `scheduling.trades.write`, `scheduling.templates.read`, `scheduling.templates.write`, `scheduling.positions.read`, `scheduling.positions.write`, `scheduling.penalties.read`, `scheduling.penalties.write`, `scheduling.footfall.read`, `scheduling.reports.read`, `scheduling.settings.read`, `scheduling.settings.write`, `scheduling.w2w.read` |
+| Reports | `reports.schedules.read`, `reports.schedules.write` |
+| Messaging | `chat.messaging.read`, `chat.messaging.write`, `chat.channels.write` |
+| Integrations | `integrations.connections.read`, `integrations.connections.write`, `webhooks.events.read`, `webhooks.events.write` |
+| Reservations | `reservations.bookings.read` |
+| Finance | `finance.budgets.read`, `finance.budgets.write` |
+
+ChefOS rejects sensitive internal surfaces for Developer Access tokens, including `admin.*`, `auth.*`, `browser.*`, `demo.*`, `onboarding.*`, `profile.*`, `support.*`, `telemetry.*`, and user-management scopes.
 
 ## Location scoping
 
 Many endpoints require a location. If a token can access five locations but the request is for one location, ChefOS evaluates the request against that one location.
 
+Location grants are attached to the token. Use `/api/v1/locations/mine` to confirm the exact locations available before showing location-specific data or attempting writes.
+
 ## Recommended scopes
 
 | Integration type | Recommended access |
 |---|---|
-| BI dashboard | Read-only sales, labor, and inventory reports |
-| POS connector | Sales import write access for approved locations |
-| Scheduling partner | Employee and shift read/write access as needed |
-| Inventory partner | Item, count, recipe, order, and waste scopes |
-| Mobile employee app | Self-service scopes for the current employee |
+| BI dashboard | `sales.analytics.read`, `scheduling.reports.read`, and read-only inventory scopes |
+| POS connector | `sales.transactions.create`, `sales.uploads.write`, and required sales read scopes |
+| Scheduling partner | `scheduling.employees.read`, `scheduling.shifts.read`, and write scopes only when syncing changes |
+| Inventory partner | Item, count, recipe, order, receipt, invoice, transfer, vendor, and waste scopes |
+| Reporting automation | `reports.schedules.read` and `reports.schedules.write` when it manages scheduled reports |
 
 Start read-only whenever possible, then add write scopes after the integration behavior is confirmed.

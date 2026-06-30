@@ -1,19 +1,19 @@
 ---
-title: "Get API access"
-description: "Understand how ChefOS API access is provisioned, scoped, and used."
+title: "Developer Access"
+description: "Create and use scoped ChefOS API tokens."
 ---
 
-ChefOS API access is permissioned by organization, user or integration identity, location, and scope. A token can only read or write data that it has been granted.
+ChefOS Developer Access lets organization admins create scoped API tokens for integrations and automation. A token can only read or write data granted by its organization, scopes, locations, environment, and expiration.
 
-## Who can request access
+## Who manages access
 
 | Requester | Typical path |
 |---|---|
-| Restaurant operator | Ask a ChefOS organization admin or ChefOS support to enable API access |
-| Integration partner | Ask the customer organization to approve the integration, then request scoped credentials |
-| Internal automation owner | Request a token scoped to the exact workflow and locations it needs |
+| Restaurant operator | Ask a ChefOS organization admin to create a scoped token |
+| Integration partner | Ask the customer organization to approve the integration and create scoped credentials |
+| Internal automation owner | Ask an organization admin for a token scoped to the exact workflow and locations it needs |
 
-For access help, contact the ChefOS team at [support@chefos.us](mailto:support@chefos.us).
+ChefOS support can help enable Developer Access for an organization. Tokens are created, rotated, and revoked by organization admins in ChefOS.
 
 ## What you need
 
@@ -22,9 +22,42 @@ Before making API calls, get these values:
 | Value | Description |
 |---|---|
 | API base URL | The ChefOS API origin for the environment you are using |
-| Bearer token | The token used in the `Authorization` header |
+| Bearer token | The API token used in the `Authorization` header |
 | Location ID | Required for most operational endpoints |
 | Scopes or permissions | The domains and actions your token can perform |
+
+Production API tokens use this format:
+
+```text
+chefos_live_<id>_<secret>
+```
+
+Send the full token as the bearer credential. Do not split, parse, or log token parts.
+
+## Create a token
+
+Organization admins create tokens in ChefOS Developer Access.
+
+1. Open ChefOS and go to **Developer Access**.
+2. Create a new API token.
+3. Name the token for the system or vendor that will use it.
+4. Select only the scopes required for the workflow.
+5. Select the locations the token can access.
+6. Choose an expiration date.
+7. Create the token and copy the secret when ChefOS reveals it.
+
+ChefOS uses one-time reveal for token secrets. Store the secret immediately in a server-side secret manager. If the secret is lost, rotate the token or revoke it and create a replacement.
+
+## Rotate or revoke a token
+
+Organization admins manage token lifecycle in ChefOS Developer Access.
+
+| Action | Use it when | Result |
+|---|---|---|
+| Rotate | A secret may be exposed, the owner changes, or the token is nearing expiration | ChefOS issues a new one-time secret for the token |
+| Revoke | An integration is paused, retired, or no longer approved | ChefOS disables the token immediately |
+
+After rotation, update the integration to use the new secret. After revocation, requests using the old token fail authentication.
 
 ## Access model
 
@@ -34,19 +67,13 @@ ChefOS evaluates every protected request against:
 |---|---|
 | Organization | Keeps data isolated to the approved ChefOS organization |
 | Location | Limits reads and writes to approved restaurants, stores, kitchens, or sublocations |
-| Permission | Limits actions by domain, resource, and operation |
+| Scope | Limits actions by domain, resource, and operation |
+| Expiration | Stops access automatically after the configured date |
 | Environment | Keeps test credentials and live credentials separate |
 
 ## First verification calls
 
 After receiving a token, verify it before building a workflow.
-
-```bash
-curl "$CHEFOS_API_BASE/api/v1/me/permissions" \
-  -H "Authorization: Bearer $CHEFOS_TOKEN"
-```
-
-Then list the locations available to the token:
 
 ```bash
 curl "$CHEFOS_API_BASE/api/v1/locations/mine" \
@@ -67,7 +94,9 @@ curl "$CHEFOS_API_BASE/api/v1/sales/summary?startDate=2026-06-01&endDate=2026-06
 - Do not place tokens in browser code, mobile apps, public repositories, screenshots, or logs.
 - Request read-only access first when the workflow does not need writes.
 - Use separate tokens for separate systems or vendors.
+- Rotate tokens before expiration and whenever the technical owner changes.
 - Rotate a token immediately if it is exposed outside the approved system.
+- Revoke tokens when an integration is paused, retired, or no longer approved.
 
 ## Recommended access request
 
@@ -77,9 +106,10 @@ When requesting access, include:
 |---|---|
 | Integration name | `Finance BI dashboard` |
 | Environment | `Sandbox` or `Production` |
-| Domains | `Sales`, `Inventory`, `Reports` |
-| Access level | `Read-only` |
+| Scopes | `sales.analytics.read`, `inventory.items.read`, `reports.schedules.read` |
+| Access level | `Read-only` or the narrowest write access required |
 | Locations | `All approved locations` or specific location IDs |
+| Expiration | `90 days`, `1 year`, or the organization's approved maximum |
 | Contact | Technical owner and support email |
 | Purpose | What the integration reads, writes, or automates |
 

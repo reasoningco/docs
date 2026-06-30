@@ -3,7 +3,9 @@ title: "Authentication"
 description: "Authenticate to the ChefOS API with bearer tokens and location context."
 ---
 
-ChefOS API requests use bearer token authentication.
+ChefOS API requests use bearer token authentication. Server-to-server integrations use API tokens created by organization admins in ChefOS Developer Access.
+
+Production API tokens use the format `chefos_live_<id>_<secret>`. Send the full token value in the `Authorization` header.
 
 ## Headers
 
@@ -26,14 +28,16 @@ Use separate credentials per environment. Never send sandbox credentials to prod
 
 - Store tokens in a server-side secret manager.
 - Do not expose API tokens in browsers, mobile apps, logs, or client-side bundles.
-- Rotate credentials if a token is shared outside the approved system.
+- Copy the token secret during one-time reveal. ChefOS does not show the secret again.
+- Rotate credentials before expiration or if a token is shared outside the approved system.
+- Revoke tokens that are no longer approved or no longer in use.
 - Request the narrowest scopes needed for the workflow.
 
 ## Common responses
 
 | Status | Meaning |
 |---|---|
-| `401` | Missing, expired, or invalid token |
+| `401` | Missing, expired, revoked, or invalid token |
 | `403` | Token is valid but does not have the required permission |
 | `404` | Resource was not found or is outside your accessible scope |
 | `429` | Too many requests; retry after the indicated delay |

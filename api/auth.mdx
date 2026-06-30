@@ -3,7 +3,7 @@ title: "Auth API"
 description: "Resolve account context and inspect the current authenticated user."
 ---
 
-Use auth and account endpoints to resolve login context, refresh sessions, inspect permissions, and manage profile settings.
+Use auth and account endpoints to resolve login context, refresh user sessions, inspect signed-in user permissions, and manage profile settings.
 
 | Endpoint | Purpose |
 |---|---|
@@ -33,7 +33,8 @@ Use auth and account endpoints to resolve login context, refresh sessions, inspe
 
 ## Integration notes
 
-- Call `/api/v1/me/permissions` after authentication to confirm the token is valid.
+- Call `/api/v1/me/permissions` after user-session authentication to confirm signed-in user access.
+- For Developer Access API tokens, verify access with `/api/v1/locations/mine` and the domain endpoint your token is scoped to use.
 - Cache permission and location data for short periods only.
 - Re-check permissions after receiving `401` or `403` responses.
-- Keep login/session endpoints in trusted clients only. Server-to-server integrations should use issued API credentials.
+- Keep login/session endpoints in trusted clients only. Server-to-server integrations should use API tokens created in Developer Access.
