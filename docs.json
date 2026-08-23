@@ -3,11 +3,11 @@
   "theme": "mint",
   "name": "ChefOS Developer Docs",
   "colors": {
-    "primary": "#F06543",
+    "primary": "#D44325",
     "light": "#F07D62",
     "dark": "#D44325"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/chef-hat.png",
   "navigation": {
     "tabs": [
       {
@@ -66,45 +66,13 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Use Cases",
-        "groups": [
-          {
-            "group": "Build with ChefOS",
-            "pages": [
-              "apps/overview",
-              "apps/inventory",
-              "apps/scheduling",
-              "apps/sales",
-              "apps/budgets",
-              "apps/pos",
-              "apps/messaging",
-              "apps/locations",
-              "apps/employee-mobile"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Assistant",
-        "groups": [
-          {
-            "group": "Sous AI",
-            "pages": [
-              "sous-ai/index",
-              "sous-ai/capabilities",
-              "sous-ai/permissions"
-            ]
-          }
-        ]
       }
     ],
     "global": {
       "anchors": [
         {
           "anchor": "Main site",
-          "href": "https://chefos.us",
+          "href": "https://counterlabs.co",
           "icon": "house"
         }
       ]
@@ -118,13 +86,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@chefos.us"
+        "href": "https://support.chefos.us"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Main site",
-      "href": "https://chefos.us"
+      "href": "https://counterlabs.co"
     }
   },
   "contextual": {

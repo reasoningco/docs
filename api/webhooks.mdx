@@ -12,7 +12,6 @@ Webhook routes handle inbound provider events and allow approved clients to insp
 | `GET /api/v1/webhooks/events` | List received webhook events |
 | `POST /api/v1/webhooks/:provider` | Receive or replay a provider event |
 | `POST /api/v1/webhooks/:provider/:connectionId` | Receive a provider event for one connection |
-| `POST /api/v1/webhooks/vapi/:tenantId` | Receive Vapi voice-agent callbacks |
 | `POST /api/v1/webhooks/postmark/inbound-invoice` | Receive Postmark inbound invoice events |
 | `POST /api/v1/webhooks/resend/inbound-invoice` | Receive Resend inbound invoice events |
 | `POST /api/v1/webhooks/stripe-pos` | Receive Stripe POS payment events |
