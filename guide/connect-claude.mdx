@@ -1,6 +1,6 @@
 ---
 title: "Connect Claude"
-description: "Use your ChefOS reports and records inside Claude, read-only, with your own ChefOS permissions."
+description: "Use your ChefOS reports and records inside Claude with your own ChefOS permissions. Read-only, except optional draft purchase orders."
 ---
 
 The ChefOS connector lets Claude read your restaurant's records and reports and answer questions about them: sales, inventory, recipe costs, purchasing, waste and counts. It uses the Model Context Protocol (MCP), so it works in claude.ai, Claude Desktop, the Claude mobile apps and Claude Code.
@@ -23,18 +23,30 @@ https://<your-organization>.chefos.us/v1/mcp
 
 ## Add ChefOS to Claude
 
-<Steps>
-  <Step title="Open connector settings">
-    In claude.ai, open **Customize** → **Connectors** and choose **Add custom connector**.
+<Tabs>
+  <Tab title="Free, Pro and Max">
+    <Steps>
+      <Step title="Add the connector">
+        In claude.ai, open **Customize** → **Connectors** and choose **Add custom connector**. Name it `ChefOS` and paste your connector address. Leave the OAuth client fields empty. If Claude asks how to register, choose **Register automatically**.
+      </Step>
+      <Step title="Sign in and approve">
+        Choose **Connect**. Claude opens the ChefOS consent screen. Sign in with your ChefOS account, check what Claude will be able to do, and choose **Connect Claude**.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Team and Enterprise">
+    <Steps>
+      <Step title="An owner adds the connector">
+        An owner opens **Organization settings** → **Connectors** → **Add** → **Custom** → **Web**, names it `ChefOS`, pastes the connector address and saves it. Leave the OAuth client fields empty, or choose **Register automatically**.
+      </Step>
+      <Step title="Each member connects">
+        Each member opens **Customize** → **Connectors**, finds **ChefOS** and chooses **Connect**. Claude opens the ChefOS consent screen. Sign in with your own ChefOS account, check what Claude will be able to do, and choose **Connect Claude**.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
 
-    On a Team or Enterprise plan, an owner opens **Organization settings** → **Connectors** → **Add** → **Custom** → **Web** instead.
-  </Step>
-  <Step title="Enter the address">
-    Name it `ChefOS` and paste your connector address. Leave the OAuth client fields empty. If Claude asks how to register, choose **Register automatically**.
-  </Step>
-  <Step title="Sign in and approve">
-    Choose **Connect**. Claude opens the ChefOS consent screen. Sign in with your ChefOS account, check what Claude will be able to do, and choose **Connect Claude**.
-  </Step>
+<Steps>
   <Step title="Use it in a chat">
     In a conversation, turn on **ChefOS** in the tools menu and ask a question.
   </Step>
@@ -73,16 +85,35 @@ Claude cannot send, approve, receive or cancel an order, or change anything else
 
 Remove the connector in Claude: open **Customize** → **Connectors**, choose **ChefOS** and remove it. Claude stops reaching ChefOS straight away.
 
-## Connect Claude Code with an API token
+If you also added ChefOS to Claude Code yourself, remove it there too with `claude mcp remove chefos`. If it used an API token, ask an organization admin to revoke the token in Developer Access.
 
-Developers can connect Claude Code without the sign-in step, using a scoped ChefOS API token that an organization admin creates in Developer Access. See [Developer Access](/guide/api-access).
+## Connect Claude Code
+
+A connector you added on claude.ai already appears in Claude Code when it is signed in to the same Claude account. To add ChefOS to Claude Code directly, add the server and sign in through the same consent screen:
 
 ```bash
-claude mcp add --transport http chefos https://<your-organization>.chefos.us/v1/mcp \
-  --header "Authorization: Bearer <your-token>"
+claude mcp add --transport http chefos https://<your-organization>.chefos.us/v1/mcp
 ```
 
-Give the token only the read scopes it needs, for example `sales.analytics.read` and `inventory.reports.read`.
+Then run `/mcp` in Claude Code, choose **chefos** and follow the sign-in steps.
+
+### Automation with an API token
+
+For unattended use, such as a script or CI job, use a scoped ChefOS API token that an organization admin creates in Developer Access. See [Developer Access](/guide/api-access). Give it only the read scopes it needs, for example `sales.analytics.read` and `inventory.reports.read`.
+
+Keep the token out of commands and config files. Put it in an environment variable, and reference the variable from `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "chefos": {
+      "type": "http",
+      "url": "https://<your-organization>.chefos.us/v1/mcp",
+      "headers": { "Authorization": "Bearer ${CHEFOS_API_TOKEN}" }
+    }
+  }
+}
+```
 
 ## Troubleshooting
 
