@@ -26,6 +26,12 @@
               "guide/errors",
               "guide/rbac"
             ]
+          },
+          {
+            "group": "Connectors",
+            "pages": [
+              "guide/connect-claude"
+            ]
           }
         ]
       },
