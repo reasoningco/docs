@@ -85,7 +85,7 @@ Claude cannot send, approve, receive or cancel an order, or change anything else
 
 Remove the connector in Claude: open **Customize** → **Connectors**, choose **ChefOS** and remove it. Claude stops reaching ChefOS straight away.
 
-If you also added ChefOS to Claude Code yourself, remove it there too with `claude mcp remove chefos`. If it used an API token, ask an organization admin to revoke the token in Developer Access.
+If you also added ChefOS to Claude Code yourself, remove it there too with `claude mcp remove chefos` (and `claude mcp remove chefos-automation` for the token setup). If you used an API token, ask an organization admin to revoke the token in Developer Access.
 
 ## Connect Claude Code
 
@@ -101,12 +101,12 @@ Then run `/mcp` in Claude Code, choose **chefos** and follow the sign-in steps.
 
 For unattended use, such as a script or CI job, use a scoped ChefOS API token that an organization admin creates in Developer Access. See [Developer Access](/guide/api-access). Give it only the read scopes it needs, for example `sales.analytics.read` and `inventory.reports.read`.
 
-Keep the token out of commands and config files. Put it in an environment variable, and reference the variable from `.mcp.json`:
+Keep the token out of commands and config files. Put it in an environment variable, and reference the variable from `.mcp.json`. Give this server its own name, such as `chefos-automation`: a `chefos` server you added for sign-in would otherwise take precedence in the same project.
 
 ```json
 {
   "mcpServers": {
-    "chefos": {
+    "chefos-automation": {
       "type": "http",
       "url": "https://<your-organization>.chefos.us/v1/mcp",
       "headers": { "Authorization": "Bearer ${CHEFOS_API_TOKEN}" }
