@@ -12,16 +12,19 @@ Claude sees only what you can see in ChefOS: your organization, the locations yo
 | You need | Notes |
 |---|---|
 | A ChefOS account | The account you sign in to ChefOS with. |
-| The connector enabled for your organization | Ask your ChefOS contact or write to [hello@chefos.us](mailto:hello@chefos.us). Until it is enabled, connecting fails with "the ChefOS MCP endpoint is not enabled for this organization". |
 | A Claude plan that allows custom connectors | Free plans allow one custom connector. On Team and Enterprise plans, an owner adds the connector for the organization first. |
 
-Your connector address is your organization's ChefOS address followed by `/v1/mcp`:
+The connector address is the same for everyone:
 
 ```text
-https://<your-organization>.chefos.us/v1/mcp
+https://mcp.chefos.us/v1/mcp
 ```
 
+Your organization's own address, `https://<your-organization>.chefos.us/v1/mcp`, also works. In more than one ChefOS organization? Use your organization's own address until the consent screen lets you choose one.
+
 ## Add ChefOS to Claude
+
+ChefOS is not listed in Claude's connector directory yet, so add it as a custom connector.
 
 <Tabs>
   <Tab title="Free, Pro and Max">
@@ -53,6 +56,15 @@ https://<your-organization>.chefos.us/v1/mcp
 </Steps>
 
 The connector you add on claude.ai also appears in Claude Desktop, the mobile apps and Claude Code when they are signed in to the same Claude account.
+
+### From Claude's connector directory
+
+Once ChefOS is listed in the directory, you can add it from there instead of as a custom connector:
+
+1. In claude.ai, open **Customize** → **Connectors** and choose **Discover**.
+2. Search for **ChefOS** and open its page.
+3. Choose **Connect to Claude**. On Team and Enterprise plans, an owner first chooses **Connect for your team**.
+4. Sign in with your ChefOS account, check what Claude will be able to do, and choose **Connect Claude**.
 
 ## What Claude can do
 
@@ -92,7 +104,7 @@ If you also added ChefOS to Claude Code yourself, remove it there too with `clau
 A connector you added on claude.ai already appears in Claude Code when it is signed in to the same Claude account. To add ChefOS to Claude Code directly, add the server and sign in through the same consent screen:
 
 ```bash
-claude mcp add --transport http chefos https://<your-organization>.chefos.us/v1/mcp
+claude mcp add --transport http chefos https://mcp.chefos.us/v1/mcp
 ```
 
 Then run `/mcp` in Claude Code, choose **chefos** and follow the sign-in steps.
@@ -108,7 +120,7 @@ Keep the token out of commands and config files. Put it in an environment variab
   "mcpServers": {
     "chefos-automation": {
       "type": "http",
-      "url": "https://<your-organization>.chefos.us/v1/mcp",
+      "url": "https://mcp.chefos.us/v1/mcp",
       "headers": { "Authorization": "Bearer ${CHEFOS_API_TOKEN}" }
     }
   }
@@ -119,7 +131,7 @@ Keep the token out of commands and config files. Put it in an environment variab
 
 | What you see | What to do |
 |---|---|
-| "The ChefOS MCP endpoint is not enabled for this organization" | Ask your ChefOS contact to enable the connector for your organization. |
+| "This ChefOS account belongs to more than one organization" | Connect with your organization's own address, `https://<your-organization>.chefos.us/v1/mcp`. |
 | You are signed in to the wrong ChefOS account | On the consent screen, choose **Switch account** and sign in again. |
 | Claude says a result was cut to fit one response | Ask a narrower question: fewer stores, a shorter period, or one item or vendor. |
 | "Reached today's ChefOS AI usage limit" | Try again tomorrow, or ask without Sous by naming a report. |
